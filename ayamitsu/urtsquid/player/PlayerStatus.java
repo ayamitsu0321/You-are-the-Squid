@@ -1,7 +1,5 @@
-package ayamitsu.urtsquid;
+package ayamitsu.urtsquid.player;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class PlayerStatus {
 
 	private byte heartCount;
+	private boolean parasiteStat;
 
 	public PlayerStatus() {}
 
@@ -24,11 +23,22 @@ public class PlayerStatus {
 		return 3;
 	}
 
-	public void readStatus(NBTTagCompound nbttagcompound) throws IOException {
-		this.heartCount = nbttagcompound.getByte("HeartCount");
+	public boolean isParasiteStat() {
+		return this.parasiteStat;
 	}
 
-	public void writeStatus(NBTTagCompound nbttagcompound) throws IOException {
-		nbttagcompound.setByte("HeartCount", this.heartCount);
+	public void setMountStat(boolean flag) {
+		this.parasiteStat = flag;
 	}
+
+	public void readStatus(NBTTagCompound nbttagcompound) {
+		this.heartCount = nbttagcompound.getByte("HeartCount");
+		this.parasiteStat = nbttagcompound.getBoolean("MountStat");
+	}
+
+	public void writeStatus(NBTTagCompound nbttagcompound) {
+		nbttagcompound.setByte("HeartCount", this.heartCount);
+		nbttagcompound.setBoolean("MountStat", this.parasiteStat);
+	}
+
 }

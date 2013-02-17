@@ -5,13 +5,13 @@ import java.util.Deque;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-import org.lwjgl.opengl.GL11;
-
-import ayamitsu.urtsquid.client.widget.HealthCountWidget;
-import ayamitsu.urtsquid.client.widget.Widget;
-
 import net.minecraft.client.Minecraft;
 
+import org.lwjgl.opengl.GL11;
+
+import ayamitsu.urtsquid.client.widget.WidgetDebug;
+import ayamitsu.urtsquid.client.widget.WidgetHealthCount;
+import ayamitsu.urtsquid.client.widget.Widget;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -21,7 +21,8 @@ public class StatusRenderer implements ITickHandler {
 	Deque<Widget> widgetList = new ArrayDeque<Widget>();
 
 	public StatusRenderer() {
-		this.widgetList.add(new HealthCountWidget());
+		this.widgetList.add(new WidgetHealthCount());
+		this.widgetList.add(new WidgetDebug());
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class StatusRenderer implements ITickHandler {
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		Minecraft mc = FMLClientHandler.instance().getClient();
 
-		if (mc.theWorld == null || mc.isGamePaused) {
+		if (mc.theWorld == null/* || mc.isGamePaused*/) {
 			return;
 		}
 

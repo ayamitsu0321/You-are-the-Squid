@@ -14,7 +14,7 @@ public class ConnectionHandler implements IConnectionHandler {
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) {
 		if (player instanceof EntityPlayerMP) {
-			PacketHandler.sendHeartStatusToClient((EntityPlayerMP)player);
+			PacketHandler.sendStatusToClient((EntityPlayerMP)player);
 		}
 	}
 

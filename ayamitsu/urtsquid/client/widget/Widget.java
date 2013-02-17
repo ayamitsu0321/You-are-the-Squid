@@ -1,9 +1,9 @@
 package ayamitsu.urtsquid.client.widget;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.Tessellator;
+import cpw.mods.fml.client.FMLClientHandler;
 
 public abstract class Widget {
 

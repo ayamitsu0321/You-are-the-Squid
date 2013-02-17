@@ -1,11 +1,9 @@
 package ayamitsu.urtsquid.network;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,16 +23,57 @@ public class PacketHandler implements IPacketHandler {
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		if (packet.channel.equals(KEY_CHANNEL)) {
-			this.handlerKeyInput(manager, packet, player);
+			this.recieveKeyInputPacket(manager, packet, player);
 		} else if (packet.channel.equals(STATUS_CHANNEL)) {
 			this.recieveStatusPacket(manager, packet, player);
 		}
 	}
 
-	private void handlerKeyInput(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+	private static void recieveKeyInputPacket(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+		NBTTagCompound nbttagcompound = null;
+
+		try {
+			nbttagcompound = CompressedStreamTools.decompress(packet.data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (nbttagcompound == null) {
+			return;
+		}
+
+		if (nbttagcompound.hasKey("ToggleParasite")) {
+			URTSquid.instance.playerStatus.setMountStat(!URTSquid.instance.playerStatus.isParasiteStat());
+			((EntityPlayer)player).addChatMessage("toggle parasite stats:" + URTSquid.instance.playerStatus.isParasiteStat());
+		}
 	}
 
-	public static void recieveStatusPacket(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+	public static void sendKeyInputPacket(KeyBinding ... arrayOfKey) {
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		KeyBinding keyBinding;
+
+		for (int i = 0; i < arrayOfKey.length; i++) {
+			keyBinding = arrayOfKey[i];
+			nbttagcompound.setBoolean(keyBinding.keyDescription, keyBinding.pressed);
+		}
+
+		if (!nbttagcompound.hasNoTags()) {
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = KEY_CHANNEL;
+
+			try {
+				byte[] bytes = CompressedStreamTools.compress(nbttagcompound);
+				packet.data = bytes;
+				packet.length = bytes.length;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			PacketDispatcher.sendPacketToServer(packet);
+		}
+	}
+
+	private static void recieveStatusPacket(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		try {
 			NBTTagCompound nbttagcompound = CompressedStreamTools.decompress(packet.data);
 			URTSquid.instance.playerStatus.readStatus(nbttagcompound);
@@ -43,8 +82,8 @@ public class PacketHandler implements IPacketHandler {
 		}
 	}
 
-	public static void sendHeartStatusToClient(EntityPlayerMP player) {
-		PlayerServerHandler playerHandler = (PlayerServerHandler)player.serverPlayerAPI.getServerPlayerBase("URTSquid");
+	public static void sendStatusToClient(EntityPlayerMP player) {
+		PlayerServerHandler playerHandler = (PlayerServerHandler)player.serverPlayerAPI.getServerPlayerBase("URTSquid.server");
 
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = STATUS_CHANNEL;
@@ -62,4 +101,5 @@ public class PacketHandler implements IPacketHandler {
 
 		PacketDispatcher.sendPacketToPlayer(packet, (Player)player);
 	}
+
 }

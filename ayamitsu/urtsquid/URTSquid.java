@@ -1,8 +1,11 @@
 package ayamitsu.urtsquid;
 
+import net.minecraft.src.PlayerAPI;
 import net.minecraft.src.ServerPlayerAPI;
 import ayamitsu.urtsquid.network.PacketHandler;
+import ayamitsu.urtsquid.player.PlayerClientHandler;
 import ayamitsu.urtsquid.player.PlayerServerHandler;
+import ayamitsu.urtsquid.player.PlayerStatus;
 import ayamitsu.urtsquid.player.PlayerTickHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -37,11 +40,16 @@ public class URTSquid {
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent event) {
 		TickRegistry.registerTickHandler(new PlayerTickHandler(), Side.SERVER);
-		ServerPlayerAPI.register("URTSquid", PlayerServerHandler.class);
+		ServerPlayerAPI.register("URTSquid.server", PlayerServerHandler.class);
+
+		if (event.getSide() == Side.CLIENT) {
+			PlayerAPI.register("URTSquid.client", PlayerClientHandler.class);
+		}
 	}
 
 	@Mod.Init
 	public void init(FMLInitializationEvent event) {
 		this.proxy.load();
 	}
+
 }
