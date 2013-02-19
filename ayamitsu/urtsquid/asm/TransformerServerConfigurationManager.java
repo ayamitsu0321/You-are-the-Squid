@@ -53,29 +53,29 @@ public class TransformerServerConfigurationManager implements IClassTransformer,
 		String targetMethodDesc = "(Ljava/lang/String;)Liq;";//"(Ljava/lang/String;)Lnet/minecraft/entity/player/EntityPlayerMP;";
 		MethodNode targetMethodNode = null;
 
-		ASMDebugLogger.info("MethodNode start");
+		ASMDebugUtils.log("MethodNode start");
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			ASMDebugLogger.log(mNode);
+			ASMDebugUtils.log(mNode);
 
 			if (targetMethodNode == null && targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
 				targetMethodNode = mNode;
-				ASMDebugLogger.info("found createPlayerForUser");
+				ASMDebugUtils.log("found createPlayerForUser");
 				//break;
 			}
 		}
 
-		ASMDebugLogger.info("MethodNode end");
+		ASMDebugUtils.log("MethodNode end");
 
 		if (targetMethodNode != null) {
-			ASMDebugLogger.info("AbstractInsnNode start");
+			ASMDebugUtils.log("AbstractInsnNode start");
 
 			MethodInsnNode targetMethodInsnNode = null;
 			AbstractInsnNode[] insnList = targetMethodNode.instructions.toArray();
 
 			for (int i = 0; i < insnList.length; i++) {//for (AbstractInsnNode aiNode : ) {
 				AbstractInsnNode aiNode = insnList[i];
-				ASMDebugLogger.log(aiNode);
+				ASMDebugUtils.log(aiNode);
 
 				if (aiNode instanceof TypeInsnNode) {
 					TypeInsnNode tiNode = (TypeInsnNode)aiNode;
@@ -98,41 +98,41 @@ public class TransformerServerConfigurationManager implements IClassTransformer,
 				}
 			}
 
-			ASMDebugLogger.info("AbstractInsnNode end");
-			ASMDebugLogger.info("LocalVariableNode start");
+			ASMDebugUtils.log("AbstractInsnNode end");
+			ASMDebugUtils.log("LocalVariableNode start");
 
 			for (LocalVariableNode lvNode : (List<LocalVariableNode>)targetMethodNode.localVariables) {
-				ASMDebugLogger.log(lvNode);
+				ASMDebugUtils.log(lvNode);
 			}
 
-			ASMDebugLogger.info("LocalVariableNode end");
+			ASMDebugUtils.log("LocalVariableNode end");
 		}
 
 		targetMethodName = "a";// respawnPlayer
 		targetMethodDesc = "(Liq;IZ)Liq;";//"(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;";
 		targetMethodNode = null;
 
-		ASMDebugLogger.info("MethodNode start");
+		ASMDebugUtils.log("MethodNode start");
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			ASMDebugLogger.log(mNode);
+			ASMDebugUtils.log(mNode);
 
 			if (targetMethodNode == null && targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
 				targetMethodNode = mNode;
-				ASMDebugLogger.info("found respawnPlayer");
+				ASMDebugUtils.log("found respawnPlayer");
 				//break;
 			}
 		}
 
-		ASMDebugLogger.info("MethodNode end");
+		ASMDebugUtils.log("MethodNode end");
 
 		if (targetMethodNode != null) {
-			ASMDebugLogger.info("AbstractInsnNode start");
+			ASMDebugUtils.log("AbstractInsnNode start");
 			AbstractInsnNode[] insnList = targetMethodNode.instructions.toArray();
 
 			for (int i = 0; i < insnList.length; i++) {//for (AbstractInsnNode aiNode : targetMethodNode.instructions.toArray()) {
 				AbstractInsnNode aiNode = insnList[i];
-				ASMDebugLogger.log(aiNode);
+				ASMDebugUtils.log(aiNode);
 
 				if (aiNode instanceof TypeInsnNode) {
 					TypeInsnNode tiNode = (TypeInsnNode)aiNode;
@@ -155,14 +155,14 @@ public class TransformerServerConfigurationManager implements IClassTransformer,
 				}
 			}
 
-			ASMDebugLogger.info("AbstractInsnNode end");
-			ASMDebugLogger.info("LocalVariableNode start");
+			ASMDebugUtils.log("AbstractInsnNode end");
+			ASMDebugUtils.log("LocalVariableNode start");
 
 			for (LocalVariableNode lvNode : (List<LocalVariableNode>)targetMethodNode.localVariables) {
-				ASMDebugLogger.log(lvNode);
+				ASMDebugUtils.log(lvNode);
 			}
 
-			ASMDebugLogger.info("LocalVariableNode end");
+			ASMDebugUtils.log("LocalVariableNode end");
 		}
 
 		ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
