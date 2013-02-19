@@ -13,7 +13,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import cpw.mods.fml.relauncher.IClassTransformer;
 
-public class GuiIngameTransformer implements IClassTransformer, Opcodes {
+public class TransformerGuiIngame implements IClassTransformer, Opcodes {
 
 	// for 1.4.7
 	private static final String GUIINGAME_CLASS_NAME = "atr";//"GuiIngamemenu";
@@ -27,7 +27,7 @@ public class GuiIngameTransformer implements IClassTransformer, Opcodes {
 		try {
 			return this.transformGuiIngame(bytes);
 		} catch (Exception e) {
-			throw new RuntimeException("Failed to load GuiIngameTransformer.", e);
+			throw new RuntimeException("Failed to transform GuiIngame.", e);
 		}
 	}
 

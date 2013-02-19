@@ -1,16 +1,22 @@
 package ayamitsu.urtsquid.network;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import ayamitsu.urtsquid.URTSquid;
-import ayamitsu.urtsquid.player.PlayerServerHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -19,6 +25,7 @@ public class PacketHandler implements IPacketHandler {
 
 	public static final String KEY_CHANNEL = "urts.key";
 	public static final String STATUS_CHANNEL = "urts.status";
+	public static final String PARASITE_CHANNEL = "urts.parasite";
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -26,6 +33,50 @@ public class PacketHandler implements IPacketHandler {
 			this.recieveKeyInputPacket(manager, packet, player);
 		} else if (packet.channel.equals(STATUS_CHANNEL)) {
 			this.recieveStatusPacket(manager, packet, player);
+		} else if (packet.channel.equals(PARASITE_CHANNEL)) {
+			this.recieveParasiteMobPacket(manager, packet, player);
+		}
+	}
+
+	private static void recieveParasiteMobPacket(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
+
+		try {
+			int entityId = dis.readInt();
+			EntityLiving living = null;
+
+			for (Object obj : ((EntityPlayerMP)player).worldObj.loadedEntityList) {
+				if (obj instanceof EntityLiving && ((EntityLiving)obj).entityId == entityId) {
+					living = (EntityLiving)obj;
+					break;
+				}
+			}
+
+			if (living != null) {
+				((EntityPlayerMP)player).mountEntity(living);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void sendParasiteMobPacket(int entityId) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(baos);
+
+		try {
+			dos.writeInt(entityId);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		if (dos.size() > 0) {
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = PARASITE_CHANNEL;
+			packet.data = baos.toByteArray();
+			packet.length = dos.size();
+			PacketDispatcher.sendPacketToServer(packet);
 		}
 	}
 
@@ -48,7 +99,7 @@ public class PacketHandler implements IPacketHandler {
 		}
 	}
 
-	public static void sendKeyInputPacket(KeyBinding ... arrayOfKey) {
+	public static void sendSimpleKeyInputPacket(KeyBinding ... arrayOfKey) {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		KeyBinding keyBinding;
 
@@ -83,8 +134,6 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static void sendStatusToClient(EntityPlayerMP player) {
-		PlayerServerHandler playerHandler = (PlayerServerHandler)player.serverPlayerAPI.getServerPlayerBase("URTSquid.server");
-
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = STATUS_CHANNEL;
 

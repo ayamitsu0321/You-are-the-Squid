@@ -19,7 +19,8 @@ public class URTSquidCorePlugin implements IFMLLoadingPlugin {
 	@Override
 	public String[] getASMTransformerClass() {
 		return new String[] {
-			"ayamitsu.urtsquid.asm.GuiIngameTransformer"
+			"ayamitsu.urtsquid.asm.TransformerServerConfigurationManager",
+			"ayamitsu.urtsquid.asm.TransformerGuiIngame"
 		};
 	}
 
