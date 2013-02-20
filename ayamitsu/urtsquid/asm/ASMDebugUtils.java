@@ -33,12 +33,17 @@ import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.FMLInjectionData;
 
 public final class ASMDebugUtils implements Opcodes {
 
 	private static final ASMDebugUtils SINGLETON = new ASMDebugUtils();
 	private static final Logger logger = Logger.getLogger("ASMDebug");
+
+	public static void info(String msg) {
+		logger.info(msg);
+	}
 
 	public static void log(String msg) {
 		logger.fine(msg);
@@ -187,6 +192,10 @@ public final class ASMDebugUtils implements Opcodes {
 		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(saveFile)));
 		dos.write(bytes);
 		dos.close();
+	}
+
+	static {
+		logger.setParent(FMLLog.getLogger());
 	}
 
 	private static class DebugStringBuilder {

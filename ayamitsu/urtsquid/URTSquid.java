@@ -34,12 +34,6 @@ public class URTSquid {
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent event) {
-		//TickRegistry.registerTickHandler(new PlayerTickHandler(), Side.SERVER);
-		/*ServerPlayerAPI.register("URTSquid.server", PlayerServerHandler.class);
-
-		if (event.getSide() == Side.CLIENT) {
-			PlayerAPI.register("URTSquid.client", PlayerClientHandler.class);
-		}*/
 	}
 
 	@Mod.Init

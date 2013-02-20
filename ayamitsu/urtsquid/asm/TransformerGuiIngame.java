@@ -43,6 +43,7 @@ public class TransformerGuiIngame implements IClassTransformer, Opcodes {
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			if (targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
 				targetMethodNode = mNode;
+				ASMDebugUtils.info("found renderGameOverlay");
 				break;
 			}
 		}
@@ -69,7 +70,7 @@ public class TransformerGuiIngame implements IClassTransformer, Opcodes {
 					if (flag && jiNode.getOpcode() == IFEQ && jiNode.getType() == 7) {
 						jiNode.setOpcode(IFNE);
 						flag = false;
-						System.out.println("[URTSquid]Override Operation");
+						ASMDebugUtils.info("Override renderGameOverlay isInsideMaterial reverse judge");
 						break;
 					}
 				}
