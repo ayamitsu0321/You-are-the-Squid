@@ -30,8 +30,6 @@ public class URTSquid {
 	@SidedProxy(clientSide = "ayamitsu.urtsquid.ClientProxy", serverSide = "ayamitsu.urtsquid.CommonProxy")
 	public static CommonProxy proxy;
 
-	public PlayerStatus playerStatus = new PlayerStatus();
-
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent event) {
 	}

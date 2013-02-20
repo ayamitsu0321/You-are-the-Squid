@@ -3,7 +3,7 @@ package ayamitsu.urtsquid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.settings.KeyBinding;
-import ayamitsu.urtsquid.client.KeyHandler;
+import ayamitsu.urtsquid.client.KeySimpleHandler;
 import ayamitsu.urtsquid.client.RenderPlayerSquid;
 import ayamitsu.urtsquid.client.StatusRenderer;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -16,9 +16,9 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void load() {
-		//RenderingRegistry.registerEntityRenderingHandler(EntityClientPlayerMP.class, new RenderPlayerSquid());
+		RenderingRegistry.registerEntityRenderingHandler(EntityClientPlayerMP.class, new RenderPlayerSquid());
 		TickRegistry.registerTickHandler(new StatusRenderer(), Side.CLIENT);
-		KeyBindingRegistry.registerKeyBinding(new KeyHandler(new KeyBinding[] { new KeyBinding("ToggleParasite", 19), new KeyBinding("DoParasite", -99) }, new boolean[] { false, false }));// key R
+		KeyBindingRegistry.registerKeyBinding(new KeySimpleHandler(new KeyBinding[] { new KeyBinding("ToggleParasite", 19),  }, new boolean[] { false }));// key R
 	}
 
 }

@@ -52,8 +52,6 @@ public class TransformerPlayerControllerMP implements IClassTransformer, Opcodes
 
 		if (targetMethodNode != null) {
 			for (AbstractInsnNode aiNode : targetMethodNode.instructions.toArray()) {
-				ASMDebugUtils.log(aiNode);
-
 				if (aiNode instanceof TypeInsnNode) {
 					TypeInsnNode tiNode = (TypeInsnNode)aiNode;
 

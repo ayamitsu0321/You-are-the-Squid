@@ -27,7 +27,7 @@ public class PlayerStatus {
 		return this.parasiteStat;
 	}
 
-	public void setMountStat(boolean flag) {
+	public void setParasiteStat(boolean flag) {
 		this.parasiteStat = flag;
 	}
 

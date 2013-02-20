@@ -17,6 +17,9 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import ayamitsu.urtsquid.URTSquid;
+import ayamitsu.urtsquid.player.EntityPlayerSquidMP;
+import ayamitsu.urtsquid.player.EntityPlayerSquidSP;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -94,18 +97,24 @@ public class PacketHandler implements IPacketHandler {
 		}
 
 		if (nbttagcompound.hasKey("ToggleParasite")) {
-			URTSquid.instance.playerStatus.setMountStat(!URTSquid.instance.playerStatus.isParasiteStat());
-			((EntityPlayer)player).addChatMessage("toggle parasite stats:" + URTSquid.instance.playerStatus.isParasiteStat());
+			((EntityPlayerSquidMP)player).playerStatus.setParasiteStat(nbttagcompound.getBoolean("ToggleParasite"));
+			((EntityPlayer)player).addChatMessage("toggle parasite stats:" + ((EntityPlayerSquidMP)player).playerStatus.isParasiteStat());
 		}
 	}
 
 	public static void sendSimpleKeyInputPacket(KeyBinding ... arrayOfKey) {
+		((EntityPlayerSquidSP)FMLClientHandler.instance().getClient().thePlayer).playerStatus.setParasiteStat(!((EntityPlayerSquidSP)FMLClientHandler.instance().getClient().thePlayer).playerStatus.isParasiteStat());
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		KeyBinding keyBinding;
 
 		for (int i = 0; i < arrayOfKey.length; i++) {
 			keyBinding = arrayOfKey[i];
-			nbttagcompound.setBoolean(keyBinding.keyDescription, keyBinding.pressed);
+
+			if (keyBinding.keyDescription.equals("ToggleParasite")) {
+				nbttagcompound.setBoolean(keyBinding.keyDescription, ((EntityPlayerSquidSP)FMLClientHandler.instance().getClient().thePlayer).playerStatus.isParasiteStat());
+			} else {
+				nbttagcompound.setBoolean(keyBinding.keyDescription, keyBinding.pressed);
+			}
 		}
 
 		if (!nbttagcompound.hasNoTags()) {
@@ -127,7 +136,12 @@ public class PacketHandler implements IPacketHandler {
 	private static void recieveStatusPacket(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		try {
 			NBTTagCompound nbttagcompound = CompressedStreamTools.decompress(packet.data);
-			URTSquid.instance.playerStatus.readStatus(nbttagcompound);
+
+			if (player instanceof EntityPlayerSquidSP) {
+				((EntityPlayerSquidSP)player).playerStatus.readStatus(nbttagcompound);
+			} else {
+				((EntityPlayerSquidMP)player).playerStatus.readStatus(nbttagcompound);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -139,7 +153,7 @@ public class PacketHandler implements IPacketHandler {
 
 		try {
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			URTSquid.instance.playerStatus.writeStatus(nbttagcompound);
+			((EntityPlayerSquidMP)player).playerStatus.writeStatus(nbttagcompound);
 			byte[] bytes = CompressedStreamTools.compress(nbttagcompound);
 			packet.data = bytes;
 			packet.length = bytes.length;

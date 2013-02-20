@@ -88,19 +88,19 @@ public final class ASMDebugUtils implements Opcodes {
 	}
 
 	public static void log(ClassNode cNode) {
-		logger.fine((new DebugStringBuilder().appendClass(cNode).appendName(cNode.name).appendSignature(cNode.signature).appendVersion(cNode.version)).toString());
+		logger.fine((new DebugStringBuilder().appendClass(cNode).appendName(cNode.name).appendSignature(cNode.signature).appendVersion(cNode.version).trim()).toString());
 	}
 
 	public static void log(FieldNode fNode) {
-		logger.fine((new DebugStringBuilder().appendClass(fNode).appendName(fNode.name).appendDesc(fNode.desc).appendSignature(fNode.signature)).toString());
+		logger.fine((new DebugStringBuilder().appendClass(fNode).appendName(fNode.name).appendDesc(fNode.desc).appendSignature(fNode.signature).trim()).toString());
 	}
 
 	public static void log(MethodNode mNode) {
-		logger.fine((new DebugStringBuilder().appendClass(mNode).appendName(mNode.name).appendDesc(mNode.desc).appendSignature(mNode.signature)).toString());
+		logger.fine((new DebugStringBuilder().appendClass(mNode).appendName(mNode.name).appendDesc(mNode.desc).appendSignature(mNode.signature).trim()).toString());
 	}
 
 	public static void log(LocalVariableNode lvNode) {
-		logger.fine((new DebugStringBuilder().appendClass(lvNode).appendName(lvNode.name).appendDesc(lvNode.desc).appendSignature(lvNode.signature).appendIndex(lvNode.index)).toString());
+		logger.fine((new DebugStringBuilder().appendClass(lvNode).appendName(lvNode.name).appendDesc(lvNode.desc).appendSignature(lvNode.signature).appendIndex(lvNode.index).trim()).toString());
 	}
 
 	public static void log(InsnList insnList) {
@@ -112,52 +112,52 @@ public final class ASMDebugUtils implements Opcodes {
 	public static void log(AbstractInsnNode aiNode) {
 		if (aiNode instanceof FieldInsnNode) {
 			FieldInsnNode fiNode = (FieldInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(fiNode).appendOpcode(fiNode.getOpcode()).appendName(fiNode.name).appendOwner(fiNode.owner).appendDesc(fiNode.desc)).toString());
+			logger.fine((new DebugStringBuilder().appendClass(fiNode).appendOpcode(fiNode.getOpcode()).appendName(fiNode.name).appendOwner(fiNode.owner).appendDesc(fiNode.desc).trim()).toString());
 		} else if (aiNode instanceof FrameNode) {
 			FrameNode fNode = (FrameNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(fNode).appendOpcode(fNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(fNode).appendOpcode(fNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof IincInsnNode) {
 			IincInsnNode iiNode = (IincInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(iiNode).appendOpcode(iiNode.getOpcode()).appendVar(iiNode.var)).toString());
+			logger.fine((new DebugStringBuilder().appendClass(iiNode).appendOpcode(iiNode.getOpcode()).appendVar(iiNode.var).trim()).toString());
 		} else if (aiNode instanceof InsnNode) {
 			InsnNode iNode = (InsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(iNode).appendOpcode(iNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(iNode).appendOpcode(iNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof IntInsnNode) {
 			IntInsnNode iiNode = (IntInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(iiNode).appendOpcode(iiNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(iiNode).appendOpcode(iiNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof InvokeDynamicInsnNode) {
 			InvokeDynamicInsnNode idiNode = (InvokeDynamicInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(idiNode).appendOpcode(idiNode.getOpcode()).appendName(idiNode.name).appendDesc(idiNode.desc)).toString());
+			logger.fine((new DebugStringBuilder().appendClass(idiNode).appendOpcode(idiNode.getOpcode()).appendName(idiNode.name).appendDesc(idiNode.desc).trim()).toString());
 		} else if (aiNode instanceof JumpInsnNode) {
 			JumpInsnNode jiNode = (JumpInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(jiNode)).appendOpcode(jiNode.getOpcode()).toString());
+			logger.fine((new DebugStringBuilder().appendClass(jiNode).appendOpcode(jiNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof LabelNode) {
 			LabelNode lNode = (LabelNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(lNode).appendOpcode(lNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(lNode).appendOpcode(lNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof LdcInsnNode) {
 			LdcInsnNode liNode = (LdcInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(liNode).appendOpcode(liNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(liNode).appendOpcode(liNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof LineNumberNode) {
 			LineNumberNode lnNode = (LineNumberNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(lnNode).appendOpcode(lnNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(lnNode).appendOpcode(lnNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof LookupSwitchInsnNode) {
 			LookupSwitchInsnNode lsiNode = (LookupSwitchInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(lsiNode).appendOpcode(lsiNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(lsiNode).appendOpcode(lsiNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof MethodInsnNode) {
 			MethodInsnNode miNode = (MethodInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(miNode).appendOpcode(miNode.getOpcode()).appendName(miNode.name).appendOwner(miNode.owner).appendDesc(miNode.desc)).toString());
+			logger.fine((new DebugStringBuilder().appendClass(miNode).appendOpcode(miNode.getOpcode()).appendName(miNode.name).appendOwner(miNode.owner).appendDesc(miNode.desc).trim()).toString());
 		} else if (aiNode instanceof MultiANewArrayInsnNode) {
 			MultiANewArrayInsnNode manaiNode = (MultiANewArrayInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(manaiNode).appendOpcode(manaiNode.getOpcode()).appendDesc(manaiNode.desc)).toString());
+			logger.fine((new DebugStringBuilder().appendClass(manaiNode).appendOpcode(manaiNode.getOpcode()).appendDesc(manaiNode.desc).trim()).toString());
 		} else if (aiNode instanceof TableSwitchInsnNode) {
 			TableSwitchInsnNode tsiNode = (TableSwitchInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(tsiNode).appendOpcode(tsiNode.getOpcode())).toString());
+			logger.fine((new DebugStringBuilder().appendClass(tsiNode).appendOpcode(tsiNode.getOpcode()).trim()).toString());
 		} else if (aiNode instanceof TypeInsnNode) {
 			TypeInsnNode tiNode = (TypeInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(tiNode).appendOpcode(tiNode.getOpcode()).appendDesc(tiNode.desc)).toString());
+			logger.fine((new DebugStringBuilder().appendClass(tiNode).appendOpcode(tiNode.getOpcode()).appendDesc(tiNode.desc).trim()).toString());
 		} else if (aiNode instanceof VarInsnNode) {
 			VarInsnNode viNode = (VarInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(viNode).appendOpcode(viNode.getOpcode()).appendVar(viNode.var)).toString());
+			logger.fine((new DebugStringBuilder().appendClass(viNode).appendOpcode(viNode.getOpcode()).appendVar(viNode.var).trim()).toString());
 		}
 	}
 

@@ -11,6 +11,7 @@ import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import cpw.mods.fml.relauncher.FMLRelauncher;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class TransformerGuiIngame implements IClassTransformer, Opcodes {
@@ -20,7 +21,7 @@ public class TransformerGuiIngame implements IClassTransformer, Opcodes {
 
 	@Override
 	public byte[] transform(String name, byte[] bytes) {
-		if (!name.equals(GUIINGAME_CLASS_NAME)) {
+		if (!FMLRelauncher.side().equals("CLIENT") || !name.equals(GUIINGAME_CLASS_NAME)) {
 			return bytes;
 		}
 

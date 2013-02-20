@@ -14,19 +14,19 @@ import net.minecraft.util.MovingObjectPosition;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.TickType;
 
-public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler {
+public class KeySimpleHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler {
 
-	public KeyHandler(KeyBinding[] keyBindings, boolean[] repeatings) {
+	public KeySimpleHandler(KeyBinding[] keyBindings, boolean[] repeatings) {
 		super(keyBindings, repeatings);
 	}
 
-	public KeyHandler(KeyBinding[] keyBindings) {
+	public KeySimpleHandler(KeyBinding[] keyBindings) {
 		super(keyBindings);
 	}
 
 	@Override
 	public String getLabel() {
-		return "URTSquid.key";
+		return "URTSquid.key_simple";
 	}
 
 	@Override
@@ -34,8 +34,6 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
 		if (tickEnd && this.canInputKey()) {
 			if (key.keyDescription.equals("ToggleParasite")) {
 				PacketHandler.sendSimpleKeyInputPacket(key);
-			} else if (key.keyDescription.equals("DoParasite")) {
-				this.handleDoParasiteKey();
 			}
 		}
 	}
@@ -50,19 +48,5 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
 
 	private boolean canInputKey() {
 		return FMLClientHandler.instance().getClient().thePlayer != null && FMLClientHandler.instance().getClient().theWorld != null && FMLClientHandler.instance().getClient().currentScreen == null;
-	}
-
-	private void handleDoParasiteKey() {
-		if (!URTSquid.instance.playerStatus.isParasiteStat() || FMLClientHandler.instance().getClient().thePlayer.inventory.getCurrentItem() != null) {
-			return;
-		}
-
-		MovingObjectPosition objectMouseOver = FMLClientHandler.instance().getClient().objectMouseOver;
-
-		if (objectMouseOver != null && objectMouseOver.typeOfHit == EnumMovingObjectType.ENTITY) {
-			if (objectMouseOver.entityHit instanceof EntityLiving) {
-				PacketHandler.sendParasiteMobPacket(objectMouseOver.entityHit.entityId);
-			}
-		}
 	}
 }
