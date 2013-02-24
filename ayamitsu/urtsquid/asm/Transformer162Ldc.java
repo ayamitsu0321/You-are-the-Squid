@@ -59,7 +59,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 					if (insnList[i] instanceof LdcInsnNode) {
 						LdcInsnNode liNode = (LdcInsnNode)insnList[i];
 
-						if (liNode.cst instanceof Double) {
+						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
 							ASMDebugUtils.info("Override EntityFishHook");
 							break;
