@@ -19,12 +19,6 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 
 	public PlayerStatus playerStatus = new PlayerStatus();
 
-	/**
-     * add field urts
-     */
-    protected int air;
-    protected int prevAir;
-
     public float field_70861_d = 0.0F;
     public float field_70862_e = 0.0F;
     public float field_70859_f = 0.0F;
@@ -52,11 +46,22 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 		this.yOffset = 0.425F;
 		//this.setPosition(this.posX, this.posY, this.posZ);
 		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+		this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
+	}
+
+	@Override
+	public double getYOffset() {
+		return this.yOffset + 0.5D;
+	}
+
+	@Override
+	public double getMountedYOffset() {
+		return super.getMountedYOffset();
 	}
 
 	@Override
 	public float getEyeHeight() {
-		return this.height * 0.5F;//this.yOffset;//this.height * 0.85F;// this.yOffset// 0.12F
+		return this.yOffset;//this.height * 0.5F;//this.yOffset;//this.height * 0.85F;// this.yOffset// 0.12F
 	}
 
 	@Override
@@ -184,22 +189,26 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 
 	@Override
 	public void onUpdate() {
-		this.prevAir = this.getAir();
 		super.onUpdate();
+		this.onUpdateSquid();
+	}
+
+	@Override
+	public void onEntityUpdate() {
+		int air = this.getAir();
+		super.onEntityUpdate();
 
 		if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.water) && !this.isPotionActive(Potion.waterBreathing) && !this.capabilities.disableDamage) {
-			this.setAir(this.decreaseAirSupply(this.prevAir));
+			--air;
+			this.setAir(air);
 
 			if (this.getAir() == -20) {
 				this.setAir(0);
 				this.attackEntityFrom(DamageSource.drown, 2);
 			}
-		} else if (this.isInsideOfMaterial(Material.water)) {
+		} else {
 			this.setAir(300);
 		}
-
-		super.setAir(this.air);
-		this.onUpdateSquid();
 	}
 
 	public void onUpdateSquid() {
@@ -256,7 +265,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 			this.renderYawOffset += (-((float)Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float)Math.PI - this.renderYawOffset) * 0.1F;
 			//this.rotationYaw = this.renderYawOffset;
 			this.field_70859_f += (float)Math.PI * this.field_70871_bB * 1.5F;
-			this.field_70861_d += (-((float)Math.atan2((double)var1, this.motionY)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
+			this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY)/*this.motionY*/)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
 		}
 		else
 		{
@@ -272,11 +281,6 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 
 			this.field_70861_d = (float)((double)this.field_70861_d + (double)(-90.0F - this.field_70861_d) * 0.02D);
 		}
-	}
-
-	@Override
-	public void setAir(int i) {
-		this.air = i;
 	}
 
 }

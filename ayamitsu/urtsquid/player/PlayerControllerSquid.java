@@ -29,11 +29,6 @@ public class PlayerControllerSquid extends PlayerControllerMP {
 	}
 
 	@Override
-	public boolean onPlayerRightClick(EntityPlayer player, World world, ItemStack itemStack, int x, int y, int z, int side, Vec3 hitVec) {
-		return super.onPlayerRightClick(player, world, itemStack, x, y, z, side, hitVec);
-	}
-
-	@Override
 	public boolean func_78768_b(EntityPlayer player, Entity entity) {
 		if (this.handleDoParasiteKey(entity)) {
 			this.syncCurrentPlayItem();

@@ -18,12 +18,6 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 
 	public PlayerStatus playerStatus = new PlayerStatus();
 
-	/**
-     * add field urts
-     */
-    protected int air;
-    protected int prevAir;
-
     public float field_70861_d = 0.0F;
     public float field_70862_e = 0.0F;
     public float field_70859_f = 0.0F;
@@ -47,7 +41,6 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 		super(mcServer, world, username, itemInWorldManager);
 		System.out.println("Spawn Override Player MP:" + username);
 		this.texture = "/mob/squid.png";
-		this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
 		this.setSize(0.95F, 0.95F);
 		this.yOffset = 0.0F;
 		//this.setPosition(this.posX, this.posY, this.posZ);
@@ -55,8 +48,13 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 	}
 
 	@Override
+	public double getYOffset() {
+		return this.yOffset + 0.5D;
+	}
+
+	@Override
 	public float getEyeHeight() {
-		return this.height * 0.5F;//0.425F;//this.height * 0.85F;// this.yOffset// 0.12F
+		return this.yOffset;//0.425F;//this.height * 0.85F;// this.yOffset// 0.12F
 	}
 
 	@Override
@@ -97,22 +95,26 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 
 	@Override
 	public void onUpdate() {
-		this.prevAir = this.getAir();
 		super.onUpdate();
+		this.onUpdateSquid();
+	}
+
+	@Override
+	public void onEntityUpdate() {
+		int air = this.getAir();
+		super.onEntityUpdate();
 
 		if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.water) && !this.isPotionActive(Potion.waterBreathing) && !this.capabilities.disableDamage) {
-			this.setAir(this.decreaseAirSupply(this.prevAir));
+			--air;
+			this.setAir(air);
 
 			if (this.getAir() == -20) {
 				this.setAir(0);
 				this.attackEntityFrom(DamageSource.drown, 2);
 			}
-		} else if (this.isInsideOfMaterial(Material.water)) {
+		} else {
 			this.setAir(300);
 		}
-
-		super.setAir(this.air);
-		this.onUpdateSquid();
 	}
 
 	public void onUpdateSquid() {
@@ -169,7 +171,7 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 			this.renderYawOffset += (-((float)Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float)Math.PI - this.renderYawOffset) * 0.1F;
 			//this.rotationYaw = this.renderYawOffset;
 			this.field_70859_f += (float)Math.PI * this.field_70871_bB * 1.5F;
-			this.field_70861_d += (-((float)Math.atan2((double)var1, this.motionY)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
+			this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY)/*this.motionY*/)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
 		}
 		else
 		{
@@ -193,17 +195,12 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 			this.playerStatus.setHeartCount((byte)(1 + this.playerStatus.getHeartCount()));
 			this.setEntityHealth(this.getMaxHealth());
 		} else {
-			this.playerStatus.setHeartCount((byte)0);
-			this.setAir(300);
 			super.onDeath(damage);
+			this.playerStatus.setHeartCount((byte)0);
+			//this.setAir(300);
 		}
 
 		PacketHandler.sendStatusToClient(this);
-	}
-
-	@Override
-	public void setAir(int i) {
-		this.air = i;
 	}
 
 	@Override
@@ -218,13 +215,11 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
-		this.air = this.getAir();
 		this.playerStatus.readStatus(nbttagcompound.getCompoundTag("URTS.status"));
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.setAir(this.air);
 		super.writeEntityToNBT(nbttagcompound);
 		NBTTagCompound statusNBT = new NBTTagCompound();
 		this.playerStatus.writeStatus(statusNBT);
