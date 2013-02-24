@@ -48,7 +48,46 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 		System.out.println("Spawn Override Player MP:" + username);
 		this.texture = "/mob/squid.png";
 		this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
-		//this.setSize(0.95F, 0.95F);
+		this.setSize(0.95F, 0.95F);
+		this.yOffset = 0.0F;
+		//this.setPosition(this.posX, this.posY, this.posZ);
+		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return this.height * 0.5F;//0.425F;//this.height * 0.85F;// this.yOffset// 0.12F
+	}
+
+	@Override
+	protected void resetHeight() {
+		super.resetHeight();
+		this.setSize(0.95F, 0.95F);
+		this.yOffset = 0.0F;
+	}
+
+	@Override
+	public void preparePlayerToSpawn() {
+		this.yOffset = 0.0F;
+		this.setSize(0.95F, 0.95F);
+
+		if (this.worldObj != null) {
+			while (this.posY > 0.0D) {
+				this.setPosition(this.posX, this.posY, this.posZ);
+
+				if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty()) {
+					break;
+				}
+
+				++this.posY;
+			}
+
+			this.motionX = this.motionY = this.motionZ = 0.0D;
+			this.rotationPitch = 0.0F;
+		}
+
+		this.setEntityHealth(this.getMaxHealth());
+		this.deathTime = 0;
 	}
 
 	@Override

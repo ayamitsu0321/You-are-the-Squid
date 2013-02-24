@@ -1,11 +1,14 @@
 package ayamitsu.urtsquid.player;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.EnumStatus;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -45,7 +48,124 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 		super(par1Minecraft, par2World, par3Session, par4NetClientHandler);
 		System.out.println("Spawn Override Player SP");
 		this.texture = "/mob/squid.png";
-		//this.setSize(0.95F, 0.95F);
+		this.setSize(0.95F, 0.95F);
+		this.yOffset = 0.425F;
+		//this.setPosition(this.posX, this.posY, this.posZ);
+		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return this.height * 0.5F;//this.yOffset;//this.height * 0.85F;// this.yOffset// 0.12F
+	}
+
+	@Override
+	protected void resetHeight() {
+		super.resetHeight();
+		this.setSize(0.95F, 0.95F);
+		this.yOffset = 0.425F;
+	}
+
+	@Override
+	public void preparePlayerToSpawn() {
+		this.yOffset = 0.425F;
+		this.setSize(0.95F, 0.95F);
+
+		if (this.worldObj != null) {
+			while (this.posY > 0.0D) {
+				this.setPosition(this.posX, this.posY, this.posZ);
+
+				if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty()) {
+					break;
+				}
+
+				++this.posY;
+			}
+
+			this.motionX = this.motionY = this.motionZ = 0.0D;
+			this.rotationPitch = 0.0F;
+		}
+
+		this.setEntityHealth(this.getMaxHealth());
+		this.deathTime = 0;
+	}
+
+	@Override
+	protected boolean pushOutOfBlocks(double par1, double par3, double par5)
+	{
+		int var7 = MathHelper.floor_double(par1);
+		int var8 = MathHelper.floor_double(par3);
+		int var9 = MathHelper.floor_double(par5);
+		double var10 = par1 - (double)var7;
+		double var12 = par3 - (double)var8;
+		double var14 = par5 - (double)var9;
+		List var16 = this.worldObj.getAllCollidingBoundingBoxes(this.boundingBox);
+
+		if (var16.isEmpty() && !this.worldObj.func_85174_u(var7, var8, var9)) {
+			return false;
+		} else {
+			boolean var17 = !this.worldObj.func_85174_u(var7 - 1, var8, var9);
+			boolean var18 = !this.worldObj.func_85174_u(var7 + 1, var8, var9);
+			boolean var19 = !this.worldObj.func_85174_u(var7, var8 - 1, var9);
+			boolean var20 = !this.worldObj.func_85174_u(var7, var8 + 1, var9);
+			boolean var21 = !this.worldObj.func_85174_u(var7, var8, var9 - 1);
+			boolean var22 = !this.worldObj.func_85174_u(var7, var8, var9 + 1);
+			byte var23 = 3;
+			double var24 = 9999.0D;
+
+			if (var17 && var10 < var24) {
+				var24 = var10;
+				var23 = 0;
+			}
+
+			if (var18 && 1.0D - var10 < var24) {
+				var24 = 1.0D - var10;
+				var23 = 1;
+			}
+
+			if (var20 && 1.0D - var12 < var24) {
+				var24 = 1.0D - var12;
+				var23 = 3;
+			}
+
+			if (var21 && var14 < var24) {
+				var24 = var14;
+				var23 = 4;
+			}
+
+			if (var22 && 1.0D - var14 < var24) {
+				var24 = 1.0D - var14;
+				var23 = 5;
+			}
+
+			float var26 = this.rand.nextFloat() * 0.2F + 0.1F;
+
+			if (var23 == 0) {
+				this.motionX = (double)(-var26);
+			}
+
+			if (var23 == 1) {
+				this.motionX = (double)var26;
+			}
+
+			if (var23 == 2) {
+				this.motionY = (double)(-var26);
+			}
+
+			if (var23 == 3) {
+				this.motionY = (double)var26;
+			}
+
+			if (var23 == 4) {
+				this.motionZ = (double)(-var26);
+			}
+
+			if (var23 == 5) {
+				this.motionZ = (double)var26;
+			}
+
+			return true;
+		}
 	}
 
 	@Override
@@ -78,7 +198,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 			this.setAir(300);
 		}
 
-		//super.setAir(this.air);
+		super.setAir(this.air);
 		this.onUpdateSquid();
 	}
 
