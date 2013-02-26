@@ -43,8 +43,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 
 	public EntityPlayerSquidSP(Minecraft par1Minecraft, World par2World, Session par3Session, NetClientHandler par4NetClientHandler) {
 		super(par1Minecraft, par2World, par3Session, par4NetClientHandler);
-		System.out.println("Spawn Override Player SP");
-		this.texture = "/mob/squid.png";
+		this.texture = this.skinUrl = "/mob/squid.png";
 		this.setSize(0.75F, 0.95F);
 		this.yOffset = 0.425F;
 		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);

@@ -17,7 +17,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void load() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityClientPlayerMP.class, new RenderPlayerSquid());
-		TickRegistry.registerTickHandler(new StatusRenderer(), Side.CLIENT);
+		//TickRegistry.registerTickHandler(new StatusRenderer(), Side.CLIENT);
 		KeyBindingRegistry.registerKeyBinding(new KeySimpleHandler(new KeyBinding[] { new KeyBinding("ToggleParasite", 19),  }, new boolean[] { false }));// key R
 	}
 
