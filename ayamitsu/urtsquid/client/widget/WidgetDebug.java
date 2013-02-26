@@ -9,8 +9,7 @@ public class WidgetDebug extends Widget {
 	@Override
 	public void draw(int width, int height, float partialTickTime) {
 		this.getFontRenderer().drawString("air:" + Integer.toString(FMLClientHandler.instance().getClient().thePlayer.getAir()), 1, 1, 0xeeeeee);
-		this.getFontRenderer().drawString("heart:" + Integer.toString(this.getPlayer().playerStatus.getMaxHeartCount() - this.getPlayer().playerStatus.getHeartCount()), 1, 11, 0xeeeeee);
-		this.getFontRenderer().drawString("parasite:" + Boolean.toString(this.getPlayer().playerStatus.isParasiteStat()), 1, 21, 0xeeeeee);
+		this.getFontRenderer().drawString("parasite:" + Boolean.toString(this.getPlayer().playerStatus.isParasiteStat()), 1, 11, 0xeeeeee);
 	}
 
 	private EntityPlayerSquidSP getPlayer() {

@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 import ayamitsu.urtsquid.client.widget.WidgetDebug;
-import ayamitsu.urtsquid.client.widget.WidgetHealthCount;
 import ayamitsu.urtsquid.client.widget.Widget;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
@@ -21,7 +20,6 @@ public class StatusRenderer implements ITickHandler {
 	Deque<Widget> widgetList = new ArrayDeque<Widget>();
 
 	public StatusRenderer() {
-		this.widgetList.add(new WidgetHealthCount());
 		this.widgetList.add(new WidgetDebug());
 	}
 

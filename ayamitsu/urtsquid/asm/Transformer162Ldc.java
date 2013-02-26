@@ -48,6 +48,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformEntityFishHook(byte[] bytes) {
+		ASMDebugUtils.info("Found EntityFishFook");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -73,6 +74,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformEntityRenderer(byte[] bytes) {
+		ASMDebugUtils.info("Found EntityRenderer");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -100,11 +102,12 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformItem(byte[] bytes) {
+		ASMDebugUtils.info("Found Item");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// a (LWorld;LEntityPlayer;Z)LMovingObjectPosition;
-			if ("a".equals(mNode.name) && "(Lyc;Lqx;Z)Laoh".equals(mNode.desc)) {
+			if ("a".equals(mNode.name) && "(Lyc;Lqx;Z)Laoh;".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -113,6 +116,10 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
+							ASMDebugUtils.info("Override Item");
+							break;
+						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
+							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
 							ASMDebugUtils.info("Override Item");
 							break;
 						}
@@ -125,11 +132,12 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformItemBoat(byte[] bytes) {
+		ASMDebugUtils.info("Found ItemBoat");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur".equals(mNode.desc)) {
+			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur;".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -138,6 +146,10 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
+							ASMDebugUtils.info("Override ItemBoat");
+							break;
+						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
+							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
 							ASMDebugUtils.info("Override ItemBoat");
 							break;
 						}
@@ -150,11 +162,12 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformItemBucket(byte[] bytes) {
+		ASMDebugUtils.info("Found ItemBucket");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur".equals(mNode.desc)) {
+			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur;".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -163,6 +176,10 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
+							ASMDebugUtils.info("Override ItemBucket");
+							break;
+						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
+							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
 							ASMDebugUtils.info("Override ItemBucket");
 							break;
 						}
@@ -175,11 +192,12 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformItemEnderEye(byte[] bytes) {
+		ASMDebugUtils.info("Found ItemEnderEye");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur".equals(mNode.desc)) {
+			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur;".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -188,6 +206,10 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
+							ASMDebugUtils.info("Override ItemEnderEye");
+							break;
+						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
+							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
 							ASMDebugUtils.info("Override ItemEnderEye");
 							break;
 						}
@@ -200,6 +222,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformNetServerHandler(byte[] bytes) {
+		ASMDebugUtils.info("Found NetServerHandler");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -232,6 +255,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	}
 
 	protected byte[] decode(ClassNode cNode) {
+		// ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS
 		ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 		cNode.accept(cWriter);
 		return cWriter.toByteArray();

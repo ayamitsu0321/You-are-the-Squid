@@ -6,18 +6,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class PlayerStatus {
 
-	private byte heartCount;
 	private boolean parasiteStat;
 
 	public PlayerStatus() {}
-
-	public void setHeartCount(byte b) {
-		this.heartCount = b;
-	}
-
-	public byte getHeartCount() {
-		return this.heartCount;
-	}
 
 	public byte getMaxHeartCount() {
 		return 3;
@@ -32,12 +23,10 @@ public class PlayerStatus {
 	}
 
 	public void readStatus(NBTTagCompound nbttagcompound) {
-		this.heartCount = nbttagcompound.getByte("HeartCount");
 		this.parasiteStat = nbttagcompound.getBoolean("MountStat");
 	}
 
 	public void writeStatus(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setByte("HeartCount", this.heartCount);
 		nbttagcompound.setBoolean("MountStat", this.parasiteStat);
 	}
 

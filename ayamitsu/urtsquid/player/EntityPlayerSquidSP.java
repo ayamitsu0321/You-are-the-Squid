@@ -2,12 +2,15 @@ package ayamitsu.urtsquid.player;
 
 import java.util.List;
 
+import ayamitsu.urtsquid.network.PacketHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EnumStatus;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
@@ -42,11 +45,15 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 		super(par1Minecraft, par2World, par3Session, par4NetClientHandler);
 		System.out.println("Spawn Override Player SP");
 		this.texture = "/mob/squid.png";
-		this.setSize(0.95F, 0.95F);
+		this.setSize(0.75F, 0.95F);
 		this.yOffset = 0.425F;
-		//this.setPosition(this.posX, this.posY, this.posZ);
 		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
 		this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
+	}
+
+	@Override
+	public String getTexture() {
+		return this.texture;
 	}
 
 	@Override
@@ -55,26 +62,21 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 	}
 
 	@Override
-	public double getMountedYOffset() {
-		return super.getMountedYOffset();
-	}
-
-	@Override
 	public float getEyeHeight() {
-		return this.yOffset;//this.height * 0.5F;//this.yOffset;//this.height * 0.85F;// this.yOffset// 0.12F
+		return 0.12F;//this.yOffset;//this.height * 0.5F;//this.yOffset;//this.height * 0.85F;// this.yOffset// 0.12F
 	}
 
 	@Override
 	protected void resetHeight() {
 		super.resetHeight();
-		this.setSize(0.95F, 0.95F);
+		this.setSize(0.75F, 0.95F);
 		this.yOffset = 0.425F;
 	}
 
 	@Override
 	public void preparePlayerToSpawn() {
 		this.yOffset = 0.425F;
-		this.setSize(0.95F, 0.95F);
+		this.setSize(0.75F, 0.95F);
 
 		if (this.worldObj != null) {
 			while (this.posY > 0.0D) {
@@ -262,7 +264,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 			}*/
 
 			var1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-			this.renderYawOffset += (-((float)Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float)Math.PI - this.renderYawOffset) * 0.1F;
+			//this.renderYawOffset += (-((float)Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float)Math.PI - this.renderYawOffset) * 0.1F;
 			//this.rotationYaw = this.renderYawOffset;
 			this.field_70859_f += (float)Math.PI * this.field_70871_bB * 1.5F;
 			this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY)/*this.motionY*/)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
@@ -279,7 +281,12 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 				this.motionZ = 0.0D;
 			}*/
 
-			this.field_70861_d = (float)((double)this.field_70861_d + (double)(-90.0F - this.field_70861_d) * 0.02D);
+			if (this.ridingEntity == null) {
+				this.field_70861_d = (float)((double)this.field_70861_d + (double)(-90.0F - this.field_70861_d) * 0.02D);
+			} else {
+				float var1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+				this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY)/*this.motionY*/)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
+			}
 		}
 	}
 

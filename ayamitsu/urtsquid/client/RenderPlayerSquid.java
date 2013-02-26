@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 
-// TODO:override armors
 public class RenderPlayerSquid extends RenderPlayer {
 
 	public RenderPlayerSquid() {
@@ -19,8 +18,7 @@ public class RenderPlayerSquid extends RenderPlayer {
 
 	protected void initRender() {
 		this.mainModel = new ModelPlayerSquid();
-		this.setRenderPassModel((ModelBase)null);// for armor
-		// clear armors
+		this.setRenderPassModel((ModelBase)null);
 	}
 
 	@Override

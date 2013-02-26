@@ -23,7 +23,6 @@ public class PlayerControllerSquid extends PlayerControllerMP {
 
 	public PlayerControllerSquid(Minecraft mc, NetClientHandler handler) {
 		super(mc, handler);
-		System.out.println("PlayerControllerSquid");
 		this.mc = mc;
 		this.netClientHandler = handler;
 	}
