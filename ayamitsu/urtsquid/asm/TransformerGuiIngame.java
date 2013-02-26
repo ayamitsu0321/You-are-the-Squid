@@ -17,7 +17,7 @@ import cpw.mods.fml.relauncher.IClassTransformer;
 public class TransformerGuiIngame implements IClassTransformer, Opcodes {
 
 	// for 1.4.7
-	private static final String GUIINGAME_CLASS_NAME = "atr";//"GuiIngamemenu";
+	private static final String GUIINGAME_CLASS_NAME = "atr";//"GuiIngame";
 
 	@Override
 	public byte[] transform(String name, byte[] bytes) {

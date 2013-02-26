@@ -23,7 +23,8 @@ public class URTSquidCorePlugin implements IFMLLoadingPlugin {
 			"ayamitsu.urtsquid.asm.TransformerGuiIngame",
 			"ayamitsu.urtsquid.asm.TransformerPlayerControllerMP",
 			"ayamitsu.urtsquid.asm.TransfomerNetClientHandler",
-			"ayamitsu.urtsquid.asm.Transformer162Ldc"
+			"ayamitsu.urtsquid.asm.Transformer162Ldc",
+			"ayamitsu.urtsquid.asm.TransformerGuiInventory"
 		};
 	}
 

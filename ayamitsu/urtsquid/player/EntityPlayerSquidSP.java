@@ -43,16 +43,12 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 
 	public EntityPlayerSquidSP(Minecraft par1Minecraft, World par2World, Session par3Session, NetClientHandler par4NetClientHandler) {
 		super(par1Minecraft, par2World, par3Session, par4NetClientHandler);
-		this.texture = this.skinUrl = "/mob/squid.png";
+		this.skinUrl = null;
+		this.texture = "/mob/squid.png";
 		this.setSize(0.75F, 0.95F);
 		this.yOffset = 0.425F;
 		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
 		this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
-	}
-
-	@Override
-	public String getTexture() {
-		return this.texture;
 	}
 
 	@Override
@@ -97,8 +93,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 	}
 
 	@Override
-	protected boolean pushOutOfBlocks(double par1, double par3, double par5)
-	{
+	protected boolean pushOutOfBlocks(double par1, double par3, double par5) {
 		int var7 = MathHelper.floor_double(par1);
 		int var8 = MathHelper.floor_double(par3);
 		int var9 = MathHelper.floor_double(par5);
@@ -192,6 +187,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 	public void onUpdate() {
 		super.onUpdate();
 		this.onUpdateSquid();
+		//System.out.println("Client:" + this.posY);
 	}
 
 	@Override

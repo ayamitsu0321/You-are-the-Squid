@@ -24,7 +24,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 	private static final String ITEMBOAT_CLASS_NAME = "sy";// ItemBoat
 	private static final String ITEMBUCKET_CLASS_NAME = "td";// ItemBucket
 	private static final String ITEMENDEREYE_CLASS_NAME = "uc";// ItemEnderEye
-	private static final String NETSERVERHANDLER_CLASS_NAME = "iv";// NetServerHandler
+	//private static final String NETSERVERHANDLER_CLASS_NAME = "iv";// NetServerHandler
 
 	@Override
 	public byte[] transform(String name, byte[] bytes) {
@@ -40,9 +40,9 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 			return this.transformItemBucket(bytes);
 		} else if (name.equals(ITEMENDEREYE_CLASS_NAME)) {
 			return this.transformItemEnderEye(bytes);
-		} else if (name.equals(NETSERVERHANDLER_CLASS_NAME)) {
+		} /*else if (name.equals(NETSERVERHANDLER_CLASS_NAME)) {
 			return this.transformNetServerHandler(bytes);
-		}
+		}*/
 
 		return bytes;
 	}
@@ -106,7 +106,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			// a (LWorld;LEntityPlayer;Z)LMovingObjectPosition;
+			// getMovingObjectPositionFromPlayer (LWorld;LEntityPlayer;Z)LMovingObjectPosition;
 			if ("a".equals(mNode.name) && "(Lyc;Lqx;Z)Laoh;".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
@@ -221,7 +221,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 		return this.decode(cNode);
 	}
 
-	private byte[] transformNetServerHandler(byte[] bytes) {
+	/*private byte[] transformNetServerHandler(byte[] bytes) {
 		ASMDebugUtils.info("Found NetServerHandler");
 		ClassNode cNode = this.encode(bytes);
 
@@ -245,7 +245,7 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 		}
 
 		return this.decode(cNode);
-	}
+	}*/
 
 	protected ClassNode encode(byte[] bytes) {
 		ClassNode cNode = new ClassNode();

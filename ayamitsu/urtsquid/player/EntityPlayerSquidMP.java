@@ -77,6 +77,7 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 	public void onUpdate() {
 		super.onUpdate();
 		this.onUpdateSquid();
+		//System.out.println("Server:" + this.posY);
 	}
 
 	public void onUpdateSquid() {}
