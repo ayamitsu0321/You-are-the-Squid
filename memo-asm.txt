@@ -98,6 +98,15 @@
 			-add
 				GL11.glTranslatef(0.0F, 1.2F, 0.0F);
 
+	EntityPlayer
+	-method
+		EnumStatus sleepInBed(int, int, int)
+		-insn
+			-replace
+				+ 0.9375F
+					«
+				- 0.9375F
+
 	// remove
 	NetServerHandler "iv"
 	-method
