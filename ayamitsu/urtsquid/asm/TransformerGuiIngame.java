@@ -14,7 +14,7 @@ import org.objectweb.asm.tree.MethodNode;
 import cpw.mods.fml.relauncher.FMLRelauncher;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
-public class TransformerGuiIngame implements IClassTransformer, Opcodes {
+public class TransformerGuiIngame extends TransformerBase {
 
 	// for 1.4.7
 	private static final String GUIINGAME_CLASS_NAME = "atr";//"GuiIngame";
@@ -33,9 +33,7 @@ public class TransformerGuiIngame implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformGuiIngame(byte[] bytes) {
-		ClassNode cNode = new ClassNode();
-		ClassReader cReader = new ClassReader(bytes);
-		cReader.accept(cNode, 0);
+		ClassNode cNode = this.encode(bytes);
 
 		String targetMethodName = "a";// renderGameOverlay
 		String targetMethodDesc = "(FZII)V";// void (float, boolean, int, int)
@@ -77,9 +75,7 @@ public class TransformerGuiIngame implements IClassTransformer, Opcodes {
 				}
 			}
 
-			ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-			cNode.accept(cWriter);
-			bytes = cWriter.toByteArray();
+			bytes = this.decode(cNode);
 		}
 
 		return bytes;

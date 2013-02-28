@@ -13,7 +13,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 
 import cpw.mods.fml.relauncher.IClassTransformer;
 
-public class TransformerServerConfigurationManager implements IClassTransformer, Opcodes {
+public class TransformerServerConfigurationManager extends TransformerBase {
 
 	// for 1.4.7
 	private static final String SERVERCONFIGURATIONMANAGER_CLASS_NAME = "gm";//"ServerConfigurationManager";
@@ -34,9 +34,7 @@ public class TransformerServerConfigurationManager implements IClassTransformer,
 	}
 
 	private byte[] transformServerConfigurationManager(byte[] bytes) {
-		ClassNode cNode = new ClassNode();
-		ClassReader cReader = new ClassReader(bytes);
-		cReader.accept(cNode, 0);
+		ClassNode cNode = this.encode(bytes);
 
 		String targetMethodName = "a";// createPlayerForUser
 		String targetMethodDesc = "(Ljava/lang/String;)Liq;";//"(Ljava/lang/String;)Lnet/minecraft/entity/player/EntityPlayerMP;";
@@ -120,9 +118,7 @@ public class TransformerServerConfigurationManager implements IClassTransformer,
 			}
 		}
 
-		ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-		cNode.accept(cWriter);
-		bytes = cWriter.toByteArray();
+		bytes = this.decode(cNode);
 
 		return bytes;
 	}

@@ -14,7 +14,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import cpw.mods.fml.relauncher.FMLRelauncher;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
-public class TransfomerNetClientHandler implements IClassTransformer, Opcodes {
+public class TransfomerNetClientHandler extends TransformerBase {
 
 	private static final String NETCLIENTHANDLER_CLASS_NAME = "ayh";// NetClientHandler
 
@@ -32,9 +32,7 @@ public class TransfomerNetClientHandler implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformNetClientHandler(byte[] bytes) {
-		ClassNode cNode = new ClassNode();
-		ClassReader cReader = new ClassReader(bytes);
-		cReader.accept(cNode, 0);
+		ClassNode cNode = this.encode(bytes);
 
 		String targetMethodName = "a";// handleLogin
 		String targetMethodDesc = "(Ldw;)V";// void (PacketLogin)
@@ -73,9 +71,7 @@ public class TransfomerNetClientHandler implements IClassTransformer, Opcodes {
 				}
 			}
 
-			ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-			cNode.accept(cWriter);
-			bytes = cWriter.toByteArray();
+			bytes = this.decode(cNode);
 		}
 
 		return bytes;

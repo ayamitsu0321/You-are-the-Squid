@@ -14,7 +14,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import cpw.mods.fml.relauncher.FMLRelauncher;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
-public class TransformerPlayerControllerMP implements IClassTransformer, Opcodes {
+public class TransformerPlayerControllerMP extends TransformerBase {
 
 	// for 1.4.7
 	private static final String PLAYERCONTROLLERMP_CLASS = "ayo";// PlayerControllerMP
@@ -35,9 +35,7 @@ public class TransformerPlayerControllerMP implements IClassTransformer, Opcodes
 	}
 
 	private byte[] transformPlayerControllerMP(byte[] bytes) {
-		ClassNode cNode = new ClassNode();
-		ClassReader cReader = new ClassReader(bytes);
-		cReader.accept(cNode, 0);
+		ClassNode cNode = this.encode(bytes);
 
 		String targetMethodName = "a";// func_78754_a
 		String targetMethodDesc = "(Lyc;)Lays;";// EntityClientPlayerMP (World)
@@ -69,9 +67,7 @@ public class TransformerPlayerControllerMP implements IClassTransformer, Opcodes
 				}
 			}
 
-			ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-			cNode.accept(cWriter);
-			bytes = cWriter.toByteArray();
+			bytes = this.decode(cNode);
 		}
 
 		return bytes;

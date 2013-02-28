@@ -93,6 +93,90 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 	}
 
 	@Override
+	public EnumStatus sleepInBedAt(int par1, int par2, int par3) {
+		EnumStatus status = super.sleepInBedAt(par1, par2, par3);
+
+		if (status == EnumStatus.OK) {
+			//this.setPosition(this.posX, this.posY - 1.875D, this.posZ);
+			//this.setPosition(this.posX, this.posY - 0.9375D, this.posZ);
+		}
+
+		return status;
+	}
+
+	/*private boolean isBlockTranslucent(int par1, int par2, int par3)
+    {
+        return this.worldObj.isBlockNormalCube(par1, par2, par3);
+    }
+
+    protected boolean pushOutOfBlocks(double par1, double par3, double par5)
+    {
+        int var7 = MathHelper.floor_double(par1);
+        int var8 = MathHelper.floor_double(par3);
+        int var9 = MathHelper.floor_double(par5);
+        double var10 = par1 - (double)var7;
+        double var12 = par5 - (double)var9;
+
+        if (this.isBlockTranslucent(var7, var8, var9))
+        {
+            boolean var14 = !this.isBlockTranslucent(var7 - 1, var8, var9) && !this.isBlockTranslucent(var7 - 1, var8 + 1, var9);
+            boolean var15 = !this.isBlockTranslucent(var7 + 1, var8, var9) && !this.isBlockTranslucent(var7 + 1, var8 + 1, var9);
+            boolean var16 = !this.isBlockTranslucent(var7, var8, var9 - 1) && !this.isBlockTranslucent(var7, var8 + 1, var9 - 1);
+            boolean var17 = !this.isBlockTranslucent(var7, var8, var9 + 1) && !this.isBlockTranslucent(var7, var8 + 1, var9 + 1);
+            byte var18 = -1;
+            double var19 = 9999.0D;
+
+            if (var14 && var10 < var19)
+            {
+                var19 = var10;
+                var18 = 0;
+            }
+
+            if (var15 && 1.0D - var10 < var19)
+            {
+                var19 = 1.0D - var10;
+                var18 = 1;
+            }
+
+            if (var16 && var12 < var19)
+            {
+                var19 = var12;
+                var18 = 4;
+            }
+
+            if (var17 && 1.0D - var12 < var19)
+            {
+                var19 = 1.0D - var12;
+                var18 = 5;
+            }
+
+            float var21 = 0.1F;
+
+            if (var18 == 0)
+            {
+                this.motionX = (double)(-var21);
+            }
+
+            if (var18 == 1)
+            {
+                this.motionX = (double)var21;
+            }
+
+            if (var18 == 4)
+            {
+                this.motionZ = (double)(-var21);
+            }
+
+            if (var18 == 5)
+            {
+                this.motionZ = (double)var21;
+            }
+        }
+
+        return false;
+    }*/
+
+	@Override
 	protected boolean pushOutOfBlocks(double par1, double par3, double par5) {
 		int var7 = MathHelper.floor_double(par1);
 		int var8 = MathHelper.floor_double(par3);
@@ -187,7 +271,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 	public void onUpdate() {
 		super.onUpdate();
 		this.onUpdateSquid();
-		//System.out.println("Client:" + this.posY);
+		System.out.println("Client:[x,y,z]=[" + String.format("%3f", this.posX) + ", " + String.format("%3f", this.boundingBox.minY) + ", " + String.format("%3f", this.posZ) + "]");
 	}
 
 	@Override

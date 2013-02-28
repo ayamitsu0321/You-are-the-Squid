@@ -16,7 +16,7 @@ import org.objectweb.asm.tree.MethodNode;
 import cpw.mods.fml.relauncher.FMLRelauncher;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
-public class TransformerGuiInventory implements IClassTransformer, Opcodes {
+public class TransformerGuiInventory extends TransformerBase {
 
 	// for 1.4.7
 	private static final String GUIINVENTORY_CLASS_NAME = "avz";// GuiInventory
@@ -37,15 +37,12 @@ public class TransformerGuiInventory implements IClassTransformer, Opcodes {
 	}
 
 	private byte[] transformGuiInventory(byte[] bytes) {
-		ClassNode cNode = new ClassNode();
-		ClassReader cReader = new ClassReader(bytes);
-		cReader.accept(cNode, 0);
+		ClassNode cNode = this.encode(bytes);
 		String targetMethodName = "a";// func_74223_a
 		String targetMethodDesc = "(Lnet/minecraft/client/Minecraft;IIIFF)V";// (Lnet/minecraft/client/Minecraft;IIIFF)V
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			if (targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
-				ASMDebugUtils.logAll(mNode);
 				MethodInsnNode targetMethodInsnNode = null;
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
@@ -74,9 +71,7 @@ public class TransformerGuiInventory implements IClassTransformer, Opcodes {
 			}
 		}
 
-		ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-		cNode.accept(cWriter);
-		bytes = cWriter.toByteArray();
+		bytes = this.decode(cNode);
 		return bytes;
 	}
 

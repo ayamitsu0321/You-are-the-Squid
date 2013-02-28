@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.IClassTransformer;
 /**
  * transform 1.62 to 0.425
  */
-public class Transformer162Ldc implements IClassTransformer, Opcodes {
+public class Transformer162Ldc extends TransformerBase {
 
 	// for 1.4.7
 	private static final String ENTITYFISHFOOK_CLASS_NAME = "rd";// EntityFishFook
@@ -247,17 +247,4 @@ public class Transformer162Ldc implements IClassTransformer, Opcodes {
 		return this.decode(cNode);
 	}*/
 
-	protected ClassNode encode(byte[] bytes) {
-		ClassNode cNode = new ClassNode();
-		ClassReader cReader = new ClassReader(bytes);
-		cReader.accept(cNode, 0);
-		return cNode;
-	}
-
-	protected byte[] decode(ClassNode cNode) {
-		// ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS
-		ClassWriter cWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-		cNode.accept(cWriter);
-		return cWriter.toByteArray();
-	}
 }
