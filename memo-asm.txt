@@ -1,7 +1,5 @@
-// for 1.4.7
-
 -class
-	NetClientHandler "ayh"
+	NetClientHandler
 	-method
 		void handleLogin(PacketLogin)
 		-insn
@@ -10,7 +8,7 @@
 					Å´
 				new PlayerControllerSquid(Minecraft, NetClientHandler)
 
-	GuiIngame "atr"
+	GuiIngame
 	-method
 		void renderGameOverlay(float, boolean, int, int)
 		-insn
@@ -19,7 +17,7 @@
 					Å´
 				if (!this.mc.thePlayer.isInsideOfMaterial(Material.water))
 
-	ServerConfigurationManager "gm"
+	ServerConfigurationManager
 	-method
 		EntityPlayerMP createPlayerForUser(String)
 		-insn
@@ -34,7 +32,7 @@
 					Å´
 				new EntityPlayerSquidMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
 
-	EntityFishHook "rd"
+	EntityFishHook
 	-method
 		<init>(World, EntityPlayer)
 		-insn
@@ -43,7 +41,7 @@
 					Å´
 				0.425D
 
-	EntityRenderer "ban"
+	EntityRenderer
 	-method
 		void orientCamera(float)
 		-insn
@@ -54,7 +52,7 @@
 			-add
 				GL11.glTranslatef();
 
-	Item "up"
+	Item
 	-method
 		MovingObjectPosition getMovingObjectPositionFromPlayer(World, EntityPlayer, boolean)
 		-insn
@@ -63,7 +61,7 @@
 					Å´
 				0.425D
 
-	ItemBoat "sy"
+	ItemBoat
 	-method
 		ItemStack onItemRightClick(ItemStack, World, EntityPlayer)
 		-insn
@@ -72,7 +70,7 @@
 					Å´
 				0.425D
 
-	ItemBucket "td"
+	ItemBucket
 	-method
 		ItemStack onItemRightClick(ItemStack, World, EntityPlayer)
 		-insn
@@ -81,7 +79,7 @@
 					Å´
 				0.425D
 
-	ItemEnderEye "uc"
+	ItemEnderEye
 	-method
 		ItemStack onItemRightClick(ItemStack, World, EntityPlayer)
 		-insn
