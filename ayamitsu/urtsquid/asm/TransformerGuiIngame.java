@@ -16,12 +16,11 @@ import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class TransformerGuiIngame extends TransformerBase {
 
-	// for 1.4.7
-	private static final String GUIINGAME_CLASS_NAME = "atr";//"GuiIngame";
+	private static final String GUIINGAME_CLASS_NAME = "net.minecraft.client.gui.GuiIngame";//"GuiIngame";
 
 	@Override
-	public byte[] transform(String name, byte[] bytes) {
-		if (!FMLRelauncher.side().equals("CLIENT") || !name.equals(GUIINGAME_CLASS_NAME)) {
+	public byte[] transform(String name, String transformedName, byte[] bytes) {
+		if (!FMLRelauncher.side().equals("CLIENT") || !transformedName.equals(GUIINGAME_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -35,12 +34,12 @@ public class TransformerGuiIngame extends TransformerBase {
 	private byte[] transformGuiIngame(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
 
-		String targetMethodName = "a";// renderGameOverlay
+		String targetMethodName = "func_73830_a";// renderGameOverlay
 		String targetMethodDesc = "(FZII)V";// void (float, boolean, int, int)
 		MethodNode targetMethodNode = null;
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			if (targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
+			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(mNode.desc)) {
 				targetMethodNode = mNode;
 				ASMDebugUtils.info("found renderGameOverlay");
 				break;
@@ -49,16 +48,16 @@ public class TransformerGuiIngame extends TransformerBase {
 
 		if (targetMethodNode != null) {
 			boolean flag = false;
-			String var_Name = "a";// isInsideMaterial
-			String var_Desc = "(Lagi;)Z";// boolean (Material)
-			String var_Owner = "ays";// EntityClientPlayerMP
+			String var_Name = "func_70055_a";// isInsideOfMaterial
+			String var_Desc = "(Lnet/minecraft/block/material/Material;)Z";// boolean (Material)
+			String var_Owner = "net/minecraft/client/entity/EntityClientPlayerMP";// EntityClientPlayerMP
 			int var_Opecode = INVOKEVIRTUAL;
 
 			for (AbstractInsnNode aiNode : targetMethodNode.instructions.toArray()) {
 				if (aiNode instanceof MethodInsnNode) {
 					MethodInsnNode miNode = (MethodInsnNode)aiNode;
 
-					if (miNode.name.equals(var_Name) && miNode.desc.equals(var_Desc) && miNode.owner.equals(var_Owner) && miNode.getOpcode() == var_Opecode) {
+					if (var_Name.equals(this.mapMethodName(miNode.owner, miNode.name, miNode.desc)) && var_Desc.equals(this.mapMethodDesc(miNode.desc)) && var_Owner.equals(this.map(miNode.owner)) && miNode.getOpcode() == var_Opecode) {
 						flag = true;
 					}
 				}
@@ -67,7 +66,7 @@ public class TransformerGuiIngame extends TransformerBase {
 					JumpInsnNode jiNode = (JumpInsnNode)aiNode;
 
 					if (flag && jiNode.getOpcode() == IFEQ && jiNode.getType() == 7) {
-						jiNode.setOpcode(IFNE);
+						jiNode.setOpcode(IFNE);// flag -> !flag
 						flag = false;
 						ASMDebugUtils.info("Override renderGameOverlay isInsideMaterial reverse judge");
 						break;

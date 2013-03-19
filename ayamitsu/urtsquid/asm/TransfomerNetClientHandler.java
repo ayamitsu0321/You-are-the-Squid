@@ -16,11 +16,11 @@ import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class TransfomerNetClientHandler extends TransformerBase {
 
-	private static final String NETCLIENTHANDLER_CLASS_NAME = "ayh";// NetClientHandler
+	private static final String NETCLIENTHANDLER_CLASS_NAME = "net.minecraft.client.multiplayer.NetClientHandler";// NetClientHandler
 
 	@Override
-	public byte[] transform(String name, byte[] bytes) {
-		if (!FMLRelauncher.side().equals("CLIENT") || !name.equals(NETCLIENTHANDLER_CLASS_NAME)) {
+	public byte[] transform(String name, String transformedName, byte[] bytes) {
+		if (!FMLRelauncher.side().equals("CLIENT") || !transformedName.equals(NETCLIENTHANDLER_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -34,12 +34,12 @@ public class TransfomerNetClientHandler extends TransformerBase {
 	private byte[] transformNetClientHandler(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
 
-		String targetMethodName = "a";// handleLogin
-		String targetMethodDesc = "(Ldw;)V";// void (PacketLogin)
+		String targetMethodName = "func_72455_a";// handleLogin
+		String targetMethodDesc = "(Lnet/minecraft/network/packet/Packet1Login;)V";// void (Packet1Login)
 		MethodNode targetMethodNode = null;
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			if (targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
+			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(this.mapMethodDesc(mNode.desc))) {
 				targetMethodNode = mNode;
 				break;
 			}
@@ -54,16 +54,16 @@ public class TransfomerNetClientHandler extends TransformerBase {
 				if (aiNode instanceof TypeInsnNode) {
 					TypeInsnNode tiNode = (TypeInsnNode)aiNode;
 
-					if (tiNode.getOpcode() == NEW && tiNode.desc.equals("ayo")) {
+					if (tiNode.getOpcode() == NEW && "net/minecraft/client/multiplayer/PlayerControllerMP".equals(this.map(tiNode.desc))) {
 						tiNode.desc = "ayamitsu/urtsquid/player/PlayerControllerSquid";
-						ASMDebugUtils.info("Override TypeInsnNode ayo to PlayerControllerSquid");
+						ASMDebugUtils.info("Override TypeInsnNode PlayerControllerMP to PlayerControllerSquid");
 					}
 				}
 
 				if (aiNode instanceof MethodInsnNode) {
 					MethodInsnNode miNode = (MethodInsnNode)aiNode;
 
-					if (miNode.getOpcode() == INVOKESPECIAL && miNode.name.equals("<init>") && miNode.owner.equals("ayo") && miNode.desc.equals("(Lnet/minecraft/client/Minecraft;Layh;)V")) {
+					if (miNode.getOpcode() == INVOKESPECIAL && miNode.name.equals("<init>") && ("net/minecraft/client/multiplayer/PlayerControllerMP").equals(this.map(miNode.owner)) && ("(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/multiplayer/NetClientHandler;)V").equals(this.mapMethodDesc(miNode.desc))) {
 						//miNode.owner = "ayamitsu/urtsquid/player/PlayerControllerSquid";
 						targetMethodNode.instructions.set(miNode, new MethodInsnNode(miNode.getOpcode(), "ayamitsu/urtsquid/player/PlayerControllerSquid", new String(miNode.name), new String(miNode.desc)));
 						ASMDebugUtils.info("Override MethodInsnNode ayo to PlayerControllerSquid");

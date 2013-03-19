@@ -4,6 +4,7 @@ import ayamitsu.urtsquid.network.PacketHandler;
 import ayamitsu.urtsquid.util.Reflector;
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.Entity;
@@ -28,6 +29,11 @@ public class PlayerControllerSquid extends PlayerControllerMP {
 	}
 
 	@Override
+	public EntityClientPlayerMP func_78754_a(World par1World) {
+		return new EntityPlayerSquidSP(this.mc, par1World, this.mc.session, this.netClientHandler);
+	}
+
+	@Override
 	public boolean func_78768_b(EntityPlayer player, Entity entity) {
 		if (this.handleDoParasiteKey(entity)) {
 			this.syncCurrentPlayItem();
@@ -40,25 +46,24 @@ public class PlayerControllerSquid extends PlayerControllerMP {
 	private void syncCurrentPlayItem() {
 		int var1 = this.mc.thePlayer.inventory.currentItem;
 
-		if (var1 != this.getCurrentPlayerItem())
-		{
+		if (var1 != this.getCurrentPlayerItem()) {
 			this.setCurrentPlayerItem(var1);
 			this.netClientHandler.addToSendQueue(new Packet16BlockItemSwitch(this.getCurrentPlayerItem()));
 		}
 	}
 
-	protected int getCurrentPlayerItem() {
+	protected int getCurrentPlayerItem() {// currentPlayerItem
 		try {
-			return ((Integer)Reflector.getPrivateValue(PlayerControllerMP.class, this, 12)).intValue();
+			return ((Integer)Reflector.getPrivateValue(PlayerControllerMP.class, this, 11)).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
 	}
 
-	protected void setCurrentPlayerItem(int i) {
+	protected void setCurrentPlayerItem(int i) {// currentPlayerItem
 		try {
-			Reflector.setPrivateValue(PlayerControllerMP.class, this, 12, i);
+			Reflector.setPrivateValue(PlayerControllerMP.class, this, 11, i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

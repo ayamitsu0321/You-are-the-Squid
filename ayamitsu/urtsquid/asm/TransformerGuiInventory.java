@@ -18,12 +18,11 @@ import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class TransformerGuiInventory extends TransformerBase {
 
-	// for 1.4.7
-	private static final String GUIINVENTORY_CLASS_NAME = "avz";// GuiInventory
+	private static final String GUIINVENTORY_CLASS_NAME = "net.minecraft.client.gui.inventory.GuiInventory";// GuiInventory
 
 	@Override
-	public byte[] transform(String name, byte[] bytes) {
-		if (!FMLRelauncher.side().equals("CLIENT") || !name.equals(GUIINVENTORY_CLASS_NAME)) {
+	public byte[] transform(String name, String transformedName, byte[] bytes) {
+		if (!FMLRelauncher.side().equals("CLIENT") || !transformedName.equals(GUIINVENTORY_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -38,11 +37,11 @@ public class TransformerGuiInventory extends TransformerBase {
 
 	private byte[] transformGuiInventory(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
-		String targetMethodName = "a";// func_74223_a
+		String targetMethodName = "func_74223_a";// func_74223_a
 		String targetMethodDesc = "(Lnet/minecraft/client/Minecraft;IIIFF)V";// (Lnet/minecraft/client/Minecraft;IIIFF)V
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			if (targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
+			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(this.mapMethodDesc(mNode.desc))) {
 				MethodInsnNode targetMethodInsnNode = null;
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 

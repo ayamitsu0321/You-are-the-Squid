@@ -49,7 +49,7 @@ public class RenderPlayerSquid extends RenderPlayer {
     }
 
 	@Override
-	public void func_82441_a(EntityPlayer par1EntityPlayer) {
+	public void renderFirstPersonArm(EntityPlayer par1EntityPlayer) {// func_82441_a
 		this.renderArm(par1EntityPlayer);
 	}
 

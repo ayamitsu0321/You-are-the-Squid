@@ -10,6 +10,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
 /**
@@ -17,32 +18,28 @@ import cpw.mods.fml.relauncher.IClassTransformer;
  */
 public class Transformer162Ldc extends TransformerBase {
 
-	// for 1.4.7
-	private static final String ENTITYFISHFOOK_CLASS_NAME = "rd";// EntityFishFook
-	private static final String ENTITYRENDERER_CLASS_NAME = "ban";// EntityRenderer
-	private static final String ITEM_CLASS_NAME = "up";// Item
-	private static final String ITEMBOAT_CLASS_NAME = "sy";// ItemBoat
-	private static final String ITEMBUCKET_CLASS_NAME = "td";// ItemBucket
-	private static final String ITEMENDEREYE_CLASS_NAME = "uc";// ItemEnderEye
-	//private static final String NETSERVERHANDLER_CLASS_NAME = "iv";// NetServerHandler
+	private static final String ENTITYFISHFOOK_CLASS_NAME = "net.minecraft.entity.projectile.EntityFishFook";// EntityFishFook
+	private static final String ITEM_CLASS_NAME = "net.minecraft.item.Item";// Item
+	private static final String ITEMBOAT_CLASS_NAME = "net.minecraft.item.ItemBoat";// ItemBoat
+	private static final String ITEMBUCKET_CLASS_NAME = "net.minecraft.item.ItemBucket";// ItemBucket
+	private static final String ITEMENDEREYE_CLASS_NAME = "net.minecraft.item.ItemEnderEye";// ItemEnderEye
+	private static final String NETSERVERHANDLER_CLASS_NAME = "net.minecraft.network.NetServerHandler";// NetServerHandler
 
 	@Override
-	public byte[] transform(String name, byte[] bytes) {
-		if (name.equals(ENTITYFISHFOOK_CLASS_NAME)) {
+	public byte[] transform(String name, String transformedName, byte[] bytes) {
+		if (transformedName.equals(ENTITYFISHFOOK_CLASS_NAME)) {
 			return this.transformEntityFishHook(bytes);
-		} else if (name.equals(ENTITYRENDERER_CLASS_NAME)) {
-			return this.transformEntityRenderer(bytes);
-		} else if (name.equals(ITEM_CLASS_NAME)) {
+		} else if (transformedName.equals(ITEM_CLASS_NAME)) {
 			return this.transformItem(bytes);
-		} else if (name.equals(ITEMBOAT_CLASS_NAME)) {
+		} else if (transformedName.equals(ITEMBOAT_CLASS_NAME)) {
 			return this.transformItemBoat(bytes);
-		} else if (name.equals(ITEMBUCKET_CLASS_NAME)) {
+		} else if (transformedName.equals(ITEMBUCKET_CLASS_NAME)) {
 			return this.transformItemBucket(bytes);
-		} else if (name.equals(ITEMENDEREYE_CLASS_NAME)) {
+		} else if (transformedName.equals(ITEMENDEREYE_CLASS_NAME)) {
 			return this.transformItemEnderEye(bytes);
-		} /*else if (name.equals(NETSERVERHANDLER_CLASS_NAME)) {
+		} else if (transformedName.equals(NETSERVERHANDLER_CLASS_NAME)) {
 			return this.transformNetServerHandler(bytes);
-		}*/
+		}
 
 		return bytes;
 	}
@@ -53,7 +50,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// <init> (LWorld;LEntityPlayer;)V
-			if ("<init>".equals(mNode.name) && "(Lyc;Lqx;)V".equals(mNode.desc)) {
+			if ("<init>".equals(mNode.name) && "(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)V".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -73,41 +70,13 @@ public class Transformer162Ldc extends TransformerBase {
 		return this.decode(cNode);
 	}
 
-	private byte[] transformEntityRenderer(byte[] bytes) {
-		ASMDebugUtils.info("Found EntityRenderer");
-		ClassNode cNode = this.encode(bytes);
-
-		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			// orientCamera (F)V
-			if ("g".equals(mNode.name) && "(F)V".equals(mNode.desc)) {
-				AbstractInsnNode[] insnList = mNode.instructions.toArray();
-
-				for (int i = 0; i < insnList.length; i++) {
-					if (insnList[i] instanceof LdcInsnNode) {
-						LdcInsnNode liNode = (LdcInsnNode)insnList[i];
-
-						if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
-							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425F)));
-							ASMDebugUtils.info("Override EntityRenderer");
-							break;
-						}
-					}
-				}
-
-				break;
-			}
-		}
-
-		return this.decode(cNode);
-	}
-
 	private byte[] transformItem(byte[] bytes) {
 		ASMDebugUtils.info("Found Item");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// getMovingObjectPositionFromPlayer (LWorld;LEntityPlayer;Z)LMovingObjectPosition;
-			if ("a".equals(mNode.name) && "(Lyc;Lqx;Z)Laoh;".equals(mNode.desc)) {
+			if ("func_77621_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;Z)Lnet/minecraft/util/MovingObjectPosition;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -137,7 +106,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur;".equals(mNode.desc)) {
+			if ("func_77659_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -167,7 +136,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur;".equals(mNode.desc)) {
+			if ("func_77659_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -197,7 +166,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("a".equals(mNode.name) && "(Lur;Lyc;Lqx;)Lur;".equals(mNode.desc)) {
+			if ("func_77659_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -221,13 +190,13 @@ public class Transformer162Ldc extends TransformerBase {
 		return this.decode(cNode);
 	}
 
-	/*private byte[] transformNetServerHandler(byte[] bytes) {
+	private byte[] transformNetServerHandler(byte[] bytes) {
 		ASMDebugUtils.info("Found NetServerHandler");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// setPlayerLocation (DDDFF)V
-			if ("a".equals(mNode.name) && "(DDDFF)V".equals(mNode.desc)) {
+			if ("func_72569_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(DDDFF)V".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -235,7 +204,7 @@ public class Transformer162Ldc extends TransformerBase {
 						LdcInsnNode liNode = (LdcInsnNode)insnList[i];
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.6200000047683716D) {
-							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.4250000047683716D)));
+							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.4260000047683716D)));
 							ASMDebugUtils.info("Override NetServerHandler");
 							break;
 						}
@@ -245,6 +214,6 @@ public class Transformer162Ldc extends TransformerBase {
 		}
 
 		return this.decode(cNode);
-	}*/
+	}
 
 }

@@ -19,7 +19,8 @@ public abstract class Widget {
 		RenderEngine renderEngine = FMLClientHandler.instance().getClient().renderEngine;
 
 		if (renderEngine != null) {
-			renderEngine.bindTexture(renderEngine.getTexture(path));
+			//renderEngine.bindTexture(renderEngine.getTexture(path));
+			renderEngine.func_98187_b(path);
 		}
 	}
 

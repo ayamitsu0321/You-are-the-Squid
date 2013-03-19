@@ -1,9 +1,12 @@
 package ayamitsu.urtsquid.player;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.EnumStatus;
 import net.minecraft.item.ItemInWorldManager;
@@ -163,7 +166,7 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 	public void onUpdate() {
 		super.onUpdate();
 		this.onUpdateSquid();
-		System.out.println("Server:[x,y,z]=[" + String.format("%3f", this.posX) + ", " + String.format("%3f", this.posY) + ", " + String.format("%3f", this.posZ) + "]");
+		//System.out.println("Server:[x,y,z]=[" + String.format("%3f", this.posX) + ", " + String.format("%3f", this.posY) + ", " + String.format("%3f", this.posZ) + "]");
 	}
 
 	public void onUpdateSquid() {}
@@ -192,12 +195,12 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 	}
 
 	@Override
-	public float getCurrentPlayerStrVsBlock(Block block) {
-		return super.getCurrentPlayerStrVsBlock(block) * (this.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(this) ? 5.0F : 1.0F);
+	public float getCurrentPlayerStrVsBlock(Block block, boolean flag) {
+		return super.getCurrentPlayerStrVsBlock(block, flag) * (this.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(this) ? 5.0F : 1.0F);
 	}
 
-	public float getCurrentPlayerStrVsBlock(Block block, int meta) {
-		return super.getCurrentPlayerStrVsBlock(block, meta) * (this.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(this) ? 5.0F : 1.0F);
+	public float getCurrentPlayerStrVsBlock(Block block, boolean flag, int meta) {
+		return super.getCurrentPlayerStrVsBlock(block, flag, meta) * (this.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(this) ? 5.0F : 1.0F);
 	}
 
 	@Override

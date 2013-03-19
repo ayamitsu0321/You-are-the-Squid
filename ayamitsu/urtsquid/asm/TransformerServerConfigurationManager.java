@@ -15,12 +15,11 @@ import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class TransformerServerConfigurationManager extends TransformerBase {
 
-	// for 1.4.7
-	private static final String SERVERCONFIGURATIONMANAGER_CLASS_NAME = "gm";//"ServerConfigurationManager";
+	private static final String SERVERCONFIGURATIONMANAGER_CLASS_NAME = "net.minecraft.server.management.ServerConfigurationManager";//"ServerConfigurationManager";
 
 	@Override
-	public byte[] transform(String name, byte[] bytes) {
-		if (!name.equals(SERVERCONFIGURATIONMANAGER_CLASS_NAME)) {
+	public byte[] transform(String name, String transformedName, byte[] bytes) {
+		if (!transformedName.equals(SERVERCONFIGURATIONMANAGER_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -36,13 +35,12 @@ public class TransformerServerConfigurationManager extends TransformerBase {
 	private byte[] transformServerConfigurationManager(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
 
-		String targetMethodName = "a";// createPlayerForUser
-		String targetMethodDesc = "(Ljava/lang/String;)Liq;";//"(Ljava/lang/String;)Lnet/minecraft/entity/player/EntityPlayerMP;";
+		String targetMethodName = "func_72366_a";// createPlayerForUser
+		String targetMethodDesc = "(Ljava/lang/String;)Lnet/minecraft/entity/player/EntityPlayerMP;";//"(Ljava/lang/String;)Lnet/minecraft/entity/player/EntityPlayerMP;";
 		MethodNode targetMethodNode = null;
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-
-			if (targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
+			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(this.mapMethodDesc(mNode.desc))) {
 				targetMethodNode = mNode;
 				ASMDebugUtils.info("found createPlayerForUser");
 				break;
@@ -50,7 +48,6 @@ public class TransformerServerConfigurationManager extends TransformerBase {
 		}
 
 		if (targetMethodNode != null) {
-
 			MethodInsnNode targetMethodInsnNode = null;
 			AbstractInsnNode[] insnList = targetMethodNode.instructions.toArray();
 
@@ -60,18 +57,16 @@ public class TransformerServerConfigurationManager extends TransformerBase {
 				if (aiNode instanceof TypeInsnNode) {
 					TypeInsnNode tiNode = (TypeInsnNode)aiNode;
 
-					if (tiNode.desc.equals("iq") && tiNode.getOpcode() == NEW) {
+					if (("net/minecraft/entity/player/EntityPlayerMP").equals(this.map(tiNode.desc)) && tiNode.getOpcode() == NEW) {
 						tiNode.desc = "ayamitsu/urtsquid/player/EntityPlayerSquidMP";
-						ASMDebugUtils.info("Override TypeInsnNode iq to EntityPlayerSquidMP");
+						ASMDebugUtils.info("Override TypeInsnNode EntityPlayerMP to EntityPlayerSquidMP");
 					}
 				}
 
 				if (aiNode instanceof MethodInsnNode) {
 					MethodInsnNode miNode = (MethodInsnNode)aiNode;
 
-					if (miNode.getOpcode() == INVOKESPECIAL && miNode.owner.equals("iq") && miNode.name.equals("<init>") && miNode.desc.equals("(Lnet/minecraft/server/MinecraftServer;Lyc;Ljava/lang/String;Lir;)V")) {
-						//miNode.owner = "ayamitsu/urtsquid/player/EntityPlayerSquidMP";
-						//insnList[i] = new MethodInsnNode(miNode.getOpcode(), "ayamitsu/urtsquid/player/EntityPlayerSquidMP", new String(miNode.name), new String(miNode.desc));
+					if (miNode.getOpcode() == INVOKESPECIAL && ("net/minecraft/entity/player/EntityPlayerMP").equals(this.map(miNode.owner)) && miNode.name.equals("<init>") && ("(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/World;Ljava/lang/String;Lnet/minecraft/item/ItemInWorldManager;)V").equals(this.mapMethodDesc(miNode.desc))) {
 						targetMethodNode.instructions.set(miNode, new MethodInsnNode(miNode.getOpcode(), "ayamitsu/urtsquid/player/EntityPlayerSquidMP", new String(miNode.name), new String(miNode.desc)));
 						ASMDebugUtils.info("Override ServerConfigurationManager createPlayerForUser");
 					}
@@ -79,12 +74,12 @@ public class TransformerServerConfigurationManager extends TransformerBase {
 			}
 		}
 
-		targetMethodName = "a";// respawnPlayer
-		targetMethodDesc = "(Liq;IZ)Liq;";//"(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;";
+		targetMethodName = "func_72368_a";// respawnPlayer
+		targetMethodDesc = "(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;";//"(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;";
 		targetMethodNode = null;
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			if (targetMethodName.equals(mNode.name) && targetMethodDesc.equals(mNode.desc)) {
+			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(this.mapMethodDesc(mNode.desc))) {
 				targetMethodNode = mNode;
 				ASMDebugUtils.info("found respawnPlayer");
 				break;
@@ -99,18 +94,16 @@ public class TransformerServerConfigurationManager extends TransformerBase {
 				if (aiNode instanceof TypeInsnNode) {
 					TypeInsnNode tiNode = (TypeInsnNode)aiNode;
 
-					if (tiNode.desc.equals("iq") && tiNode.getOpcode() == NEW) {
+					if (("net/minecraft/entity/player/EntityPlayerMP").equals(this.map(tiNode.desc)) && tiNode.getOpcode() == NEW) {
 						tiNode.desc = "ayamitsu/urtsquid/player/EntityPlayerSquidMP";
-						ASMDebugUtils.info("Override TypeInsnNode iq to EntityPlayerSquidMP");
+						ASMDebugUtils.info("Override TypeInsnNode EntityPlayerMP to EntityPlayerSquidMP");
 					}
 				}
 
 				if (aiNode instanceof MethodInsnNode) {
 					MethodInsnNode miNode = (MethodInsnNode)aiNode;
 
-					if (miNode.name.equals("<init>") && miNode.owner.equals("iq") && miNode.getOpcode() == INVOKESPECIAL && miNode.desc.equals("(Lnet/minecraft/server/MinecraftServer;Lyc;Ljava/lang/String;Lir;)V")) {
-						//miNode.owner = "ayamitsu/urtsquid/player/EntityPlayerSquidMP";
-						//insnList[i] = new MethodInsnNode(miNode.getOpcode(), "ayamitsu/urtsquid/player/EntityPlayerSquidMP", new String(miNode.name), new String(miNode.desc));
+					if (("<init>").equals(miNode.name) && ("net/minecraft/entity/player/EntityPlayerMP").equals(this.map(miNode.owner)) && miNode.getOpcode() == INVOKESPECIAL && ("(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/World;Ljava/lang/String;Lnet/minecraft/item/ItemInWorldManager;)V").equals(this.mapMethodDesc(miNode.desc))) {
 						targetMethodNode.instructions.set(miNode, new MethodInsnNode(miNode.getOpcode(), "ayamitsu/urtsquid/player/EntityPlayerSquidMP", new String(miNode.name), new String(miNode.desc)));
 						ASMDebugUtils.info("Override ServerConfigurationManager respawnPlayer");
 					}

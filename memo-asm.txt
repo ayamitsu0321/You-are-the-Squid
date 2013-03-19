@@ -19,15 +19,6 @@
 					«
 				if (!this.mc.thePlayer.isInsideOfMaterial(Material.water))
 
-	PlayerControllerMP "ayo"
-	-method
-		EntityClientPlayerMP func_78754_a(World)
-		-insn
-			-replace
-				return new EntityPlayerClientMP(Minecraft, World, Session, NetClientHandler);
-					«
-				return new EntityPlayerSquidSP(Minecraft, World, Session, NetClientHandler);
-
 	ServerConfigurationManager "gm"
 	-method
 		EntityPlayerMP createPlayerForUser(String)
@@ -36,6 +27,12 @@
 				return new EntityPlayerMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
 					«
 				return new EntityPlayerSquidMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
+		EntityPlayerMP respawnPlayer(EntityPlayerMP, int, boolean)
+		-insn
+			-replace
+				new EntityPlayerMP(MinecraftServer, WorldServer, String, ItemInWorldManager)
+					«
+				new EntityPlayerSquidMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
 
 	EntityFishHook "rd"
 	-method
@@ -54,6 +51,8 @@
 				1.62F
 					«
 				0.425F
+			-add
+				GL11.glTranslatef();
 
 	Item "up"
 	-method
@@ -93,11 +92,24 @@
 
 	GuiInventory
 	-method
-		void func_74223_a(Minecraft, int, int, int, float, float)// renderPlayerEntity ?
+		void drawPlayerOnGui(Minecraft, int, int, int, float, float)
 		-insn
 			-add
+				-after
+				GL11.glTranslatef(0.0F, par0Minecraft.thePlayer.yOffset, 0.0F);
+				
 				GL11.glTranslatef(0.0F, 1.2F, 0.0F);
 
+	NetServerHandler
+	-method
+		void setPlayerLocation(double, double, double, float, float)
+		-insn
+			-replace
+				1.6200000047683716D // ƒoƒjƒ‰‚ÌClient‚ÌyOffset‚Æ‚Ù‚Ú“¯‚¶
+					«
+				0.4260000047683716D// •ÏX‚µ‚½MOD‚ÌClient‚ÌyOffset‚Æ‚Ù‚Ú“¯‚¶
+
+	// remove
 	EntityPlayer
 	-method
 		EnumStatus sleepInBed(int, int, int)
@@ -106,6 +118,16 @@
 				+ 0.9375F
 					«
 				- 0.9375F
+
+	// remove
+	PlayerControllerMP "ayo"
+	-method
+		EntityClientPlayerMP func_78754_a(World)
+		-insn
+			-replace
+				return new EntityPlayerClientMP(Minecraft, World, Session, NetClientHandler);
+					«
+				return new EntityPlayerSquidSP(Minecraft, World, Session, NetClientHandler);
 
 	// remove
 	NetServerHandler "iv"

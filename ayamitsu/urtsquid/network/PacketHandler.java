@@ -98,7 +98,7 @@ public class PacketHandler implements IPacketHandler {
 
 		if (nbttagcompound.hasKey("ToggleParasite")) {
 			((EntityPlayerSquidMP)player).playerStatus.setParasiteStat(nbttagcompound.getBoolean("ToggleParasite"));
-			((EntityPlayer)player).addChatMessage("toggle parasite stats:" + ((EntityPlayerSquidMP)player).playerStatus.isParasiteStat());
+			((EntityPlayer)player).addChatMessage("toggle parasite stat:" + ((EntityPlayerSquidMP)player).playerStatus.isParasiteStat());
 		}
 	}
 

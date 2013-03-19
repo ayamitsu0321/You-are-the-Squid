@@ -54,15 +54,23 @@ public final class ASMDebugUtils implements Opcodes {
 		log(cNode);
 		logger.fine("field node log start");
 
-		for (FieldNode fNode : (List<FieldNode>)cNode.fields) {
-			log(fNode);
+		if (cNode.fields != null) {
+			for (FieldNode fNode : (List<FieldNode>)cNode.fields) {
+				log(fNode);
+			}
+		} else {
+			logger.info("fields are null!");
 		}
 
 		logger.fine("field node log end");
 		logger.fine("method node log start");
 
-		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
-			logAll(mNode);
+		if (cNode.methods != null) {
+			for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
+				logAll(mNode);
+			}
+		} else {
+			logger.fine("methods are null!");
 		}
 
 		logger.fine("method node log end");
@@ -73,15 +81,23 @@ public final class ASMDebugUtils implements Opcodes {
 		log(mNode);
 		logger.fine("method instruction node log start");
 
-		for (AbstractInsnNode aiNode : mNode.instructions.toArray()) {
-			log(aiNode);
+		if (mNode.instructions != null) {
+			for (AbstractInsnNode aiNode : mNode.instructions.toArray()) {
+				log(aiNode);
+			}
+		} else {
+			logger.info("method instructions are null!");
 		}
 
 		logger.fine("method instruction node log end");
 		logger.fine("method local variable node log start");
 
-		for (LocalVariableNode lvNode : (List<LocalVariableNode>)mNode.localVariables) {
-			log(lvNode);
+		if (mNode.localVariables != null) {
+			for (LocalVariableNode lvNode : (List<LocalVariableNode>)mNode.localVariables) {
+				log(lvNode);
+			}
+		} else {
+			logger.fine("method localVariables are null!");
 		}
 
 		logger.fine("method local variable node log end");
@@ -139,7 +155,7 @@ public final class ASMDebugUtils implements Opcodes {
 			logger.fine((new DebugStringBuilder().appendClass(liNode).appendOpcode(liNode.getOpcode()).appendCst(liNode.cst).trim()).toString());
 		} else if (aiNode instanceof LineNumberNode) {
 			LineNumberNode lnNode = (LineNumberNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(lnNode).appendOpcode(lnNode.getOpcode()).trim()).toString());
+			logger.fine((new DebugStringBuilder().appendClass(lnNode).appendOpcode(lnNode.getOpcode()).appendLine(lnNode.line).appendStart(lnNode.start).trim()).toString());
 		} else if (aiNode instanceof LookupSwitchInsnNode) {
 			LookupSwitchInsnNode lsiNode = (LookupSwitchInsnNode)aiNode;
 			logger.fine((new DebugStringBuilder().appendClass(lsiNode).appendOpcode(lsiNode.getOpcode()).trim()).toString());
@@ -200,77 +216,88 @@ public final class ASMDebugUtils implements Opcodes {
 
 	private static class DebugStringBuilder {
 
-		private String instance = "";
+		private StringBuilder instance = new StringBuilder();
 
 		public DebugStringBuilder() {}
 
 		public DebugStringBuilder append(Object obj) {
-			this.instance += String.valueOf(obj);
+			this.instance.append(String.valueOf(obj));
 			return this;
 		}
 
 		public DebugStringBuilder appendVersion(int version) {
-			this.instance += "version:" + Integer.toString(version) + ", ";
+			this.instance.append("version:" + Integer.toString(version) + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendClass(Object instance) {
-			this.instance += (instance == null ? "null" : instance.getClass().getSimpleName()) + ", ";
+			this.instance.append((instance == null ? "null" : instance.getClass().getSimpleName()) + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendName(String name) {
-			this.instance += "name:" + name + ", ";
+			this.instance.append("name:" + name + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendOwner(String owner) {
-			this.instance += "owner:" + owner + ", ";
+			this.instance.append("owner:" + owner + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendDesc(String desc) {
-			this.instance += "desc:" + desc + ", ";
+			this.instance.append("desc:" + desc + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendOpcode(int opcode) {
-			this.instance += "opcode:" + Integer.toHexString(opcode) + "(" + ASMDebugUtils.translateOpcode(opcode) + ")" + ", ";
+			this.instance.append("opcode:" + Integer.toHexString(opcode) + "(" + ASMDebugUtils.translateOpcode(opcode) + ")" + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendVar(int var) {
-			this.instance += "var:" + Integer.toString(var) + ", ";
+			this.instance.append("var:" + Integer.toString(var) + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendSignature(String signature) {
-			this.instance += "signature:" + signature + ", ";
+			this.instance.append("signature:" + signature + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendIndex(int index) {
-			this.instance += "index:" + Integer.toString(index) + ", ";
+			this.instance.append("index:" + Integer.toString(index) + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder appendCst(Object cst) {
-			this.instance += "cst:" + (cst == null ? "null" : cst.getClass().getSimpleName()) + "(" + String.valueOf(cst) + "), ";
+			this.instance.append("cst:" + (cst == null ? "null" : cst.getClass().getSimpleName()) + "(" + String.valueOf(cst) + "), ");
+			return this;
+		}
+
+		public DebugStringBuilder appendLine(int line) {
+			this.instance.append("line:" + Integer.toString(line) + ", ");
+			return this;
+		}
+
+		public DebugStringBuilder appendStart(LabelNode start) {
+			this.instance.append("start(LabelNode):opcode:" + start.getOpcode() + ", label(LabelNode):info:" + start.getLabel().info + ", ");
 			return this;
 		}
 
 		public DebugStringBuilder trim() {
-			this.instance = this.instance.trim();
+			String str = this.instance.toString().trim();
+			this.instance = new StringBuilder(str);
 
-			if (this.instance.endsWith(",")) {
-				this.instance = this.instance.substring(0, this.instance.length() - 1);
+			if (this.instance.charAt(this.instance.length() - 1) == ',') {
+				this.instance.deleteCharAt(this.instance.length() - 1);
 			}
 
 			return this;
 		}
 
 		public String toString() {
-			return this.instance;
+			return this.instance.toString();
 		}
 
 	}
