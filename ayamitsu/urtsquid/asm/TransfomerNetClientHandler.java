@@ -56,7 +56,6 @@ public class TransfomerNetClientHandler extends TransformerBase {
 
 					if (tiNode.getOpcode() == NEW && "net/minecraft/client/multiplayer/PlayerControllerMP".equals(this.map(tiNode.desc))) {
 						tiNode.desc = "ayamitsu/urtsquid/player/PlayerControllerSquid";
-						ASMDebugUtils.info("Override TypeInsnNode PlayerControllerMP to PlayerControllerSquid");
 					}
 				}
 
@@ -66,7 +65,6 @@ public class TransfomerNetClientHandler extends TransformerBase {
 					if (miNode.getOpcode() == INVOKESPECIAL && miNode.name.equals("<init>") && ("net/minecraft/client/multiplayer/PlayerControllerMP").equals(this.map(miNode.owner)) && ("(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/multiplayer/NetClientHandler;)V").equals(this.mapMethodDesc(miNode.desc))) {
 						//miNode.owner = "ayamitsu/urtsquid/player/PlayerControllerSquid";
 						targetMethodNode.instructions.set(miNode, new MethodInsnNode(miNode.getOpcode(), "ayamitsu/urtsquid/player/PlayerControllerSquid", new String(miNode.name), new String(miNode.desc)));
-						ASMDebugUtils.info("Override MethodInsnNode ayo to PlayerControllerSquid");
 					}
 				}
 			}

@@ -41,7 +41,6 @@ public class TransformerGuiIngame extends TransformerBase {
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(mNode.desc)) {
 				targetMethodNode = mNode;
-				ASMDebugUtils.info("found renderGameOverlay");
 				break;
 			}
 		}
@@ -68,7 +67,6 @@ public class TransformerGuiIngame extends TransformerBase {
 					if (flag && jiNode.getOpcode() == IFEQ && jiNode.getType() == 7) {
 						jiNode.setOpcode(IFNE);// flag -> !flag
 						flag = false;
-						ASMDebugUtils.info("Override renderGameOverlay isInsideMaterial reverse judge");
 						break;
 					}
 				}

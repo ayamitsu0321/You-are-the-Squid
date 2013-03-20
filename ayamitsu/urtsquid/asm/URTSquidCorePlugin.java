@@ -24,7 +24,9 @@ public class URTSquidCorePlugin implements IFMLLoadingPlugin {
 			"ayamitsu.urtsquid.asm.TransfomerNetClientHandler",
 			"ayamitsu.urtsquid.asm.Transformer162Ldc",
 			"ayamitsu.urtsquid.asm.TransformerGuiInventory",
-			"ayamitsu.urtsquid.asm.TransformerEntityRenderer"
+			"ayamitsu.urtsquid.asm.TransformerEntityRenderer",
+			"ayamitsu.urtsquid.asm.TransformerEntityPlayer",
+			"ayamitsu.urtsquid.asm.TransformerBlockBed"
 		};
 	}
 

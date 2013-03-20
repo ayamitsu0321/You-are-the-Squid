@@ -146,7 +146,7 @@ public final class ASMDebugUtils implements Opcodes {
 			logger.fine((new DebugStringBuilder().appendClass(idiNode).appendOpcode(idiNode.getOpcode()).appendName(idiNode.name).appendDesc(idiNode.desc).trim()).toString());
 		} else if (aiNode instanceof JumpInsnNode) {
 			JumpInsnNode jiNode = (JumpInsnNode)aiNode;
-			logger.fine((new DebugStringBuilder().appendClass(jiNode).appendOpcode(jiNode.getOpcode()).trim()).toString());
+			logger.fine((new DebugStringBuilder().appendClass(jiNode).appendOpcode(jiNode.getOpcode()).appendLabel(jiNode.label).trim()).toString());
 		} else if (aiNode instanceof LabelNode) {
 			LabelNode lNode = (LabelNode)aiNode;
 			logger.fine((new DebugStringBuilder().appendClass(lNode).appendOpcode(lNode.getOpcode()).trim()).toString());
@@ -282,6 +282,11 @@ public final class ASMDebugUtils implements Opcodes {
 
 		public DebugStringBuilder appendStart(LabelNode start) {
 			this.instance.append("start(LabelNode):opcode:" + start.getOpcode() + ", label(LabelNode):info:" + start.getLabel().info + ", ");
+			return this;
+		}
+
+		public DebugStringBuilder appendLabel(LabelNode label) {
+			this.instance.append("label:opcode" + label.getOpcode());
 			return this;
 		}
 

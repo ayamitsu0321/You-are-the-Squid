@@ -106,6 +106,28 @@
 				1.6200000047683716D // ƒoƒjƒ‰‚ÌClient‚ÌyOffset‚Æ‚Ù‚Ú“¯‚¶
 					«
 				0.4260000047683716D// •ÏX‚µ‚½MOD‚ÌClient‚ÌyOffset‚Æ‚Ù‚Ú“¯‚¶
+	
+	EntityPlayer
+	-method
+		static ChunkCoordinates verifyRespawnCoordinates(World, ChunkCoordinates, boolean)
+		-insn
+			-replace
+				boolean var6 = !var4.isSolid() && !var4.isLiquid();
+				boolean var7 = !var5.isSolid() && !var5.isLiquid();
+				return par2 && var6 && var7 ? par1ChunkCoordinates : null;
+					«
+				boolean var6 = !var4.isSolid();
+				boolean var7 = !var5.isSolid() && !var5.isLiquid();
+				return par2 && var6 ? par1ChunkCoordinates : null;
+	
+	BlockBed
+	-method
+		ChunkCoordinates getNearestEmptyChunkCoordinates(World, int, int, int, int)
+		-insn
+			-replace
+				if (par0World.doesBlockHaveSolidTopSurface(l2, par2 - 1, i3) && par0World.isAirBlock(l2, par2, i3) && par0World.isAirBlock(l2, par2 + 1, i3))
+					«
+				if (par0World.doesBlockHaveSolidTopSurface(l2, par2 - 1, i3) && !par0World.getBlockMaterial(l2, par2, i3).isSolid())
 
 	// remove
 	EntityPlayer

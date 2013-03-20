@@ -1,5 +1,9 @@
 package ayamitsu.urtsquid.asm;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -56,6 +60,40 @@ public abstract class TransformerBase implements IClassTransformer, Opcodes {
 	protected String mapFieldName(String owner, String name, String desc)
 	{
 		return FMLDeobfuscatingRemapper.INSTANCE.mapFieldName(owner, name, desc);
+	}
+
+	protected String unmap(String typeName)
+	{
+		return FMLDeobfuscatingRemapper.INSTANCE.unmap(typeName);
+	}
+
+	protected String unmapMethodName(String owner, String name)
+	{
+		owner = this.unmap(owner);// unmap
+		Map<String, String> methodMap = null;
+
+		try
+		{
+			Method method = FMLDeobfuscatingRemapper.class.getDeclaredMethod("getMethodMap", new Class[] { String.class });
+			method.setAccessible(true);
+			methodMap = (Map<String, String>)method.invoke(FMLDeobfuscatingRemapper.INSTANCE, owner);
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+
+		for (Map.Entry<String, String> entry : methodMap.entrySet())
+		{
+			if (name.equals(entry.getValue()))
+			{
+				// example:
+				// g(III)Lahz -> g
+				return entry.getKey().substring(0, entry.getKey().indexOf("("));
+			}
+		}
+
+		return name;
 	}
 
 }

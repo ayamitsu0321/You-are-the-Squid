@@ -12,7 +12,7 @@ public class URTSquidModContainer extends DummyModContainer {
 		ModMetadata meta = this.getMetadata();
 		meta.modId       = "urtsquidplugin";
 		meta.name        = "URTSquidPlugin";
-		meta.version     = "0.1.0";
+		meta.version     = "0.1.1";
 		meta.authorList  = Arrays.asList("ayamitsu");
 		meta.description = "";
 		meta.url         = "";

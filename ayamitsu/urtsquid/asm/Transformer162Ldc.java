@@ -14,7 +14,7 @@ import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
 /**
- * transform 1.62 to 0.425
+ * transform 1.62 to 0.425(player's yOffset)
  */
 public class Transformer162Ldc extends TransformerBase {
 
@@ -45,7 +45,6 @@ public class Transformer162Ldc extends TransformerBase {
 	}
 
 	private byte[] transformEntityFishHook(byte[] bytes) {
-		ASMDebugUtils.info("Found EntityFishFook");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -59,7 +58,6 @@ public class Transformer162Ldc extends TransformerBase {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
-							ASMDebugUtils.info("Override EntityFishHook");
 							break;
 						}
 					}
@@ -71,7 +69,6 @@ public class Transformer162Ldc extends TransformerBase {
 	}
 
 	private byte[] transformItem(byte[] bytes) {
-		ASMDebugUtils.info("Found Item");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -85,11 +82,9 @@ public class Transformer162Ldc extends TransformerBase {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
-							ASMDebugUtils.info("Override Item");
 							break;
 						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
-							ASMDebugUtils.info("Override Item");
 							break;
 						}
 					}
@@ -101,7 +96,6 @@ public class Transformer162Ldc extends TransformerBase {
 	}
 
 	private byte[] transformItemBoat(byte[] bytes) {
-		ASMDebugUtils.info("Found ItemBoat");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -115,11 +109,9 @@ public class Transformer162Ldc extends TransformerBase {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
-							ASMDebugUtils.info("Override ItemBoat");
 							break;
 						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
-							ASMDebugUtils.info("Override ItemBoat");
 							break;
 						}
 					}
@@ -131,7 +123,6 @@ public class Transformer162Ldc extends TransformerBase {
 	}
 
 	private byte[] transformItemBucket(byte[] bytes) {
-		ASMDebugUtils.info("Found ItemBucket");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -145,11 +136,9 @@ public class Transformer162Ldc extends TransformerBase {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
-							ASMDebugUtils.info("Override ItemBucket");
 							break;
 						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
-							ASMDebugUtils.info("Override ItemBucket");
 							break;
 						}
 					}
@@ -161,7 +150,6 @@ public class Transformer162Ldc extends TransformerBase {
 	}
 
 	private byte[] transformItemEnderEye(byte[] bytes) {
-		ASMDebugUtils.info("Found ItemEnderEye");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -175,11 +163,9 @@ public class Transformer162Ldc extends TransformerBase {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.62D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.425D)));
-							ASMDebugUtils.info("Override ItemEnderEye");
 							break;
 						} else if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425D)));
-							ASMDebugUtils.info("Override ItemEnderEye");
 							break;
 						}
 					}
@@ -191,7 +177,6 @@ public class Transformer162Ldc extends TransformerBase {
 	}
 
 	private byte[] transformNetServerHandler(byte[] bytes) {
-		ASMDebugUtils.info("Found NetServerHandler");
 		ClassNode cNode = this.encode(bytes);
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
@@ -205,7 +190,6 @@ public class Transformer162Ldc extends TransformerBase {
 
 						if (liNode.cst instanceof Double && ((Double)liNode.cst).doubleValue() == 1.6200000047683716D) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Double(0.4260000047683716D)));
-							ASMDebugUtils.info("Override NetServerHandler");
 							break;
 						}
 					}

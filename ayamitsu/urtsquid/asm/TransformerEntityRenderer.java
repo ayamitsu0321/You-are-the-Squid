@@ -31,7 +31,6 @@ public class TransformerEntityRenderer extends TransformerBase {
 	}
 
 	private byte[] transformEntityRenderer(byte[] arrayOfByte) {
-		ASMDebugUtils.info("Found EntityRenderer");
 		ClassNode cNode = this.encode(arrayOfByte);
 
 		boolean addedTransratef = false;
@@ -49,7 +48,6 @@ public class TransformerEntityRenderer extends TransformerBase {
 
 						if (liNode.cst instanceof Float && ((Float)liNode.cst).floatValue() == 1.62F) {
 							mNode.instructions.set(liNode, new LdcInsnNode(new Float(0.425F)));
-							ASMDebugUtils.info("Override orientCamera(1)");
 							continue;
 						}
 					}
@@ -64,7 +62,6 @@ public class TransformerEntityRenderer extends TransformerBase {
 							overrideList.add(new InsnNode(FCONST_0));
 							overrideList.add(new MethodInsnNode(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glTranslatef", "(FFF)V"));
 							mNode.instructions.insert(miNode, overrideList);
-							ASMDebugUtils.info("Override orientCamera(2)");
 							addedTransratef = true;
 						}
 					}

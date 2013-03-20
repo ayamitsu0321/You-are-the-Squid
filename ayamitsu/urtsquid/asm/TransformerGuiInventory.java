@@ -26,8 +26,6 @@ public class TransformerGuiInventory extends TransformerBase {
 			return bytes;
 		}
 
-		ASMDebugUtils.info("Found GuiInventory");
-
 		try {
 			return this.transformGuiInventory(bytes);
 		} catch (Exception e) {
@@ -64,7 +62,6 @@ public class TransformerGuiInventory extends TransformerBase {
 					insns.add(new InsnNode(FCONST_0));
 					insns.add(new MethodInsnNode(INVOKESTATIC, "org/lwjgl/opengl/GL11", "glTranslatef", "(FFF)V"));
 					mNode.instructions.insertBefore(targetMethodInsnNode, insns);
-					ASMDebugUtils.info("Override GuiInventory add MethodInsnNode");
 					break;
 				}
 			}
