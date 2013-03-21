@@ -7,6 +7,12 @@
 				new PlayerControllerMP(Minecraft, NetClientHandler)
 					«
 				new PlayerControllerSquid(Minecraft, NetClientHandler)
+		void handleNamedEntitySpawn(Packet20NamedEntitySpawn)
+		-insn
+			-replace
+				new EntityOtherPlayerMP(World, String);
+					«
+				new EntityOtherPlayerSquid(World, String)
 
 	GuiIngame
 	-method
@@ -50,7 +56,10 @@
 					«
 				0.425F
 			-add
-				GL11.glTranslatef();
+				-after
+				GL11.glTranslatef(0.0F, 0.3F, 0.0F);
+				
+				GL11.glTranslatef(0.0F, -1.195F, 0.0F);
 
 	Item
 	-method

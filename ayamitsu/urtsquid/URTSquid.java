@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(
 	modid = "URTSquid",
 	name = "URTSquid",
-	version = "0.1.1"
+	version = "0.1.2"
 )
 @NetworkMod(
 	clientSideRequired = true,
