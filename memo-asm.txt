@@ -1,4 +1,13 @@
 -class
+	BlockBed
+	-method
+		ChunkCoordinates getNearestEmptyChunkCoordinates(World, int, int, int, int)
+		-insn
+			-replace
+				if (par0World.doesBlockHaveSolidTopSurface(l2, par2 - 1, i3) && par0World.isAirBlock(l2, par2, i3) && par0World.isAirBlock(l2, par2 + 1, i3))
+					«
+				if (par0World.doesBlockHaveSolidTopSurface(l2, par2 - 1, i3) && !par0World.getBlockMaterial(l2, par2, i3).isSolid())
+
 	NetClientHandler
 	-method
 		void handleLogin(PacketLogin)
@@ -14,39 +23,6 @@
 					«
 				new EntityOtherPlayerSquid(World, String)
 
-	GuiIngame
-	-method
-		void renderGameOverlay(float, boolean, int, int)
-		-insn
-			-replace
-				if (this.mc.thePlayer.isInsideOfMaterial(Material.water))
-					«
-				if (!this.mc.thePlayer.isInsideOfMaterial(Material.water))
-
-	ServerConfigurationManager
-	-method
-		EntityPlayerMP createPlayerForUser(String)
-		-insn
-			-replace
-				return new EntityPlayerMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
-					«
-				return new EntityPlayerSquidMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
-		EntityPlayerMP respawnPlayer(EntityPlayerMP, int, boolean)
-		-insn
-			-replace
-				new EntityPlayerMP(MinecraftServer, WorldServer, String, ItemInWorldManager)
-					«
-				new EntityPlayerSquidMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
-
-	EntityFishHook
-	-method
-		<init>(World, EntityPlayer)
-		-insn
-			-replace
-				1.62D
-					«
-				0.425D
-
 	EntityRenderer
 	-method
 		void orientCamera(float)
@@ -60,6 +36,47 @@
 				GL11.glTranslatef(0.0F, 0.3F, 0.0F);
 				
 				GL11.glTranslatef(0.0F, -1.195F, 0.0F);
+
+	GuiIngame
+	-method
+		void renderGameOverlay(float, boolean, int, int)
+		-insn
+			-replace
+				if (this.mc.thePlayer.isInsideOfMaterial(Material.water))
+					«
+				if (!this.mc.thePlayer.isInsideOfMaterial(Material.water))
+
+	GuiInventory
+	-method
+		void drawPlayerOnGui(Minecraft, int, int, int, float, float)
+		-insn
+			-add
+				-after
+				GL11.glTranslatef(0.0F, par0Minecraft.thePlayer.yOffset, 0.0F);
+				
+				GL11.glTranslatef(0.0F, 1.2F, 0.0F);
+
+	EntityFishHook
+	-method
+		<init>(World, EntityPlayer)
+		-insn
+			-replace
+				1.62D
+					«
+				0.425D
+
+	EntityPlayer
+	-method
+		static ChunkCoordinates verifyRespawnCoordinates(World, ChunkCoordinates, boolean)
+		-insn
+			-replace
+				boolean var6 = !var4.isSolid() && !var4.isLiquid();
+				boolean var7 = !var5.isSolid() && !var5.isLiquid();
+				return par2 && var6 && var7 ? par1ChunkCoordinates : null;
+					«
+				boolean var6 = !var4.isSolid();
+				boolean var7 = !var5.isSolid() && !var5.isLiquid();
+				return par2 && var6 ? par1ChunkCoordinates : null;
 
 	Item
 	-method
@@ -97,16 +114,6 @@
 					«
 				0.425D
 
-	GuiInventory
-	-method
-		void drawPlayerOnGui(Minecraft, int, int, int, float, float)
-		-insn
-			-add
-				-after
-				GL11.glTranslatef(0.0F, par0Minecraft.thePlayer.yOffset, 0.0F);
-				
-				GL11.glTranslatef(0.0F, 1.2F, 0.0F);
-
 	NetServerHandler
 	-method
 		void setPlayerLocation(double, double, double, float, float)
@@ -115,28 +122,21 @@
 				1.6200000047683716D // ƒoƒjƒ‰‚ÌClient‚ÌyOffset‚Æ‚Ù‚Ú“¯‚¶
 					«
 				0.4260000047683716D// •ÏX‚µ‚½MOD‚ÌClient‚ÌyOffset‚Æ‚Ù‚Ú“¯‚¶
-	
-	EntityPlayer
+
+	ServerConfigurationManager
 	-method
-		static ChunkCoordinates verifyRespawnCoordinates(World, ChunkCoordinates, boolean)
+		EntityPlayerMP createPlayerForUser(String)
 		-insn
 			-replace
-				boolean var6 = !var4.isSolid() && !var4.isLiquid();
-				boolean var7 = !var5.isSolid() && !var5.isLiquid();
-				return par2 && var6 && var7 ? par1ChunkCoordinates : null;
+				return new EntityPlayerMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
 					«
-				boolean var6 = !var4.isSolid();
-				boolean var7 = !var5.isSolid() && !var5.isLiquid();
-				return par2 && var6 ? par1ChunkCoordinates : null;
-	
-	BlockBed
-	-method
-		ChunkCoordinates getNearestEmptyChunkCoordinates(World, int, int, int, int)
+				return new EntityPlayerSquidMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
+		EntityPlayerMP respawnPlayer(EntityPlayerMP, int, boolean)
 		-insn
 			-replace
-				if (par0World.doesBlockHaveSolidTopSurface(l2, par2 - 1, i3) && par0World.isAirBlock(l2, par2, i3) && par0World.isAirBlock(l2, par2 + 1, i3))
+				new EntityPlayerMP(MinecraftServer, WorldServer, String, ItemInWorldManager)
 					«
-				if (par0World.doesBlockHaveSolidTopSurface(l2, par2 - 1, i3) && !par0World.getBlockMaterial(l2, par2, i3).isSolid())
+				new EntityPlayerSquidMP(MinecraftServer, WorldServer, String, ItemInWorldManager);
 
 	// remove
 	EntityPlayer

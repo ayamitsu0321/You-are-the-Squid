@@ -93,90 +93,6 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 	}
 
 	@Override
-	public EnumStatus sleepInBedAt(int par1, int par2, int par3) {
-		EnumStatus status = super.sleepInBedAt(par1, par2, par3);
-
-		if (status == EnumStatus.OK) {
-			//this.setPosition(this.posX, this.posY - 1.875D, this.posZ);
-			//this.setPosition(this.posX, this.posY - 0.9375D, this.posZ);
-		}
-
-		return status;
-	}
-
-	/*private boolean isBlockTranslucent(int par1, int par2, int par3)
-    {
-        return this.worldObj.isBlockNormalCube(par1, par2, par3);
-    }
-
-    protected boolean pushOutOfBlocks(double par1, double par3, double par5)
-    {
-        int var7 = MathHelper.floor_double(par1);
-        int var8 = MathHelper.floor_double(par3);
-        int var9 = MathHelper.floor_double(par5);
-        double var10 = par1 - (double)var7;
-        double var12 = par5 - (double)var9;
-
-        if (this.isBlockTranslucent(var7, var8, var9))
-        {
-            boolean var14 = !this.isBlockTranslucent(var7 - 1, var8, var9) && !this.isBlockTranslucent(var7 - 1, var8 + 1, var9);
-            boolean var15 = !this.isBlockTranslucent(var7 + 1, var8, var9) && !this.isBlockTranslucent(var7 + 1, var8 + 1, var9);
-            boolean var16 = !this.isBlockTranslucent(var7, var8, var9 - 1) && !this.isBlockTranslucent(var7, var8 + 1, var9 - 1);
-            boolean var17 = !this.isBlockTranslucent(var7, var8, var9 + 1) && !this.isBlockTranslucent(var7, var8 + 1, var9 + 1);
-            byte var18 = -1;
-            double var19 = 9999.0D;
-
-            if (var14 && var10 < var19)
-            {
-                var19 = var10;
-                var18 = 0;
-            }
-
-            if (var15 && 1.0D - var10 < var19)
-            {
-                var19 = 1.0D - var10;
-                var18 = 1;
-            }
-
-            if (var16 && var12 < var19)
-            {
-                var19 = var12;
-                var18 = 4;
-            }
-
-            if (var17 && 1.0D - var12 < var19)
-            {
-                var19 = 1.0D - var12;
-                var18 = 5;
-            }
-
-            float var21 = 0.1F;
-
-            if (var18 == 0)
-            {
-                this.motionX = (double)(-var21);
-            }
-
-            if (var18 == 1)
-            {
-                this.motionX = (double)var21;
-            }
-
-            if (var18 == 4)
-            {
-                this.motionZ = (double)(-var21);
-            }
-
-            if (var18 == 5)
-            {
-                this.motionZ = (double)var21;
-            }
-        }
-
-        return false;
-    }*/
-
-	@Override
 	protected boolean pushOutOfBlocks(double par1, double par3, double par5) {
 		int var7 = MathHelper.floor_double(par1);
 		int var8 = MathHelper.floor_double(par3);
@@ -292,6 +208,22 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 		}
 	}
 
+	// change move speed
+	@Override
+	public void updateEntityActionState() {
+		super.updateEntityActionState();
+
+		if (!this.onGround && this.isInWater()) {
+			this.moveStrafing *= 2.0D;
+	        this.moveForward *= 2.0D;
+		}
+
+		if (this.onGround && !this.isInWater()) {
+			this.moveStrafing *= 0.5D;
+	        this.moveForward *= 0.5D;
+		}
+	}
+
 	public void onUpdateSquid() {
 		this.field_70862_e = this.field_70861_d;
 		this.field_70860_g = this.field_70859_f;
@@ -335,36 +267,19 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 				this.field_70871_bB *= 0.99F;
 			}
 
-			/*if (!this.worldObj.isRemote)
-			{
-				this.motionX = (double)(this.randomMotionVecX * this.randomMotionSpeed);
-				//this.motionY = (double)(this.randomMotionVecY * this.randomMotionSpeed);
-				this.motionZ = (double)(this.randomMotionVecZ * this.randomMotionSpeed);
-			}*/
-
 			var1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-			//this.renderYawOffset += (-((float)Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float)Math.PI - this.renderYawOffset) * 0.1F;
-			//this.rotationYaw = this.renderYawOffset;
 			this.field_70859_f += (float)Math.PI * this.field_70871_bB * 1.5F;
-			this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY)/*this.motionY*/)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
+			this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY))) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
 		}
 		else
 		{
 			this.tentacleAngle = MathHelper.abs(MathHelper.sin(this.field_70867_h)) * (float)Math.PI * 0.25F;
 
-			/*if (!this.worldObj.isRemote)
-			{
-				this.motionX = 0.0D;
-				//this.motionY -= 0.08D;
-				//this.motionY *= 0.9800000190734863D;
-				this.motionZ = 0.0D;
-			}*/
-
 			if (this.ridingEntity == null) {
 				this.field_70861_d = (float)((double)this.field_70861_d + (double)(-90.0F - this.field_70861_d) * 0.02D);
 			} else {
 				float var1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-				this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY)/*this.motionY*/)) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
+				this.field_70861_d += (-((float)Math.atan2((double)var1, (this.posY - this.lastTickPosY))) * 180.0F / (float)Math.PI - this.field_70861_d) * 0.1F;
 			}
 		}
 	}
