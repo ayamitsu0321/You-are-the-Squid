@@ -9,13 +9,16 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.EnumStatus;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemInWorldManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import ayamitsu.urtsquid.api.BreathRecoveryItemAPI;
 import ayamitsu.urtsquid.URTSquid;
 import ayamitsu.urtsquid.network.PacketHandler;
 
@@ -130,6 +133,46 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 		NBTTagCompound statusNBT = new NBTTagCompound();
 		this.playerStatus.writeStatus(statusNBT);
 		nbttagcompound.setCompoundTag("URTS.status", statusNBT);
+	}
+
+	protected ItemStack getItemInUseMod() {
+		Field itemInUse = null;
+
+		try {
+			itemInUse = EntityPlayer.class.getDeclaredFields()[31];
+		} catch (Exception e) {
+			e.printStackTrace();
+			itemInUse = null;
+		}
+
+		if (itemInUse != null) {
+			itemInUse.setAccessible(true);
+
+			try {
+				return (ItemStack)itemInUse.get(this);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	protected void onItemUseFinish() {
+		ItemStack prevItem = this.getItemInUseMod();
+		super.onItemUseFinish();
+
+		// water bottle
+		if (prevItem != null && BreathRecoveryItemAPI.match(prevItem)) {
+			int prevAir = this.getAir();
+
+			if (prevAir + 100 < 300) {
+				this.setAir(prevAir + 100);
+			} else {
+				this.setAir(300);
+			}
+		}
 	}
 
 }
