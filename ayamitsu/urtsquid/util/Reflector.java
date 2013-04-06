@@ -2,12 +2,19 @@ package ayamitsu.urtsquid.util;
 
 import java.lang.reflect.Field;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 public final class Reflector {
 
-	private static final boolean obfuscated = !net.minecraft.world.World.class.getSimpleName().equals("World");
+	private static final boolean isRenameTable;
+	/*private static final boolean obfuscated = !net.minecraft.world.World.class.getSimpleName().equals("World");
 
 	public static boolean isObfuscated() {
 		return obfuscated;
+	}*/
+
+	public static boolean isRenameTable() {
+		return isRenameTable;
 	}
 
 	public static Field getField(Class clazz, Object instance, String name) {
@@ -64,6 +71,16 @@ public final class Reflector {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	static {
+		Field itemInUse = null;
+
+		try {
+			itemInUse = EntityPlayer.class.getDeclaredField("itemInUse");
+		} catch (NoSuchFieldException e) {}
+
+		isRenameTable = itemInUse != null;
 	}
 
 }

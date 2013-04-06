@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import ayamitsu.urtsquid.api.BreathRecoveryItemAPI;
 import ayamitsu.urtsquid.URTSquid;
 import ayamitsu.urtsquid.network.PacketHandler;
+import ayamitsu.urtsquid.util.Reflector;
 
 public class EntityPlayerSquidMP extends EntityPlayerMP {
 
@@ -135,11 +136,11 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 		nbttagcompound.setCompoundTag("URTS.status", statusNBT);
 	}
 
-	protected ItemStack getItemInUseMod() {
+	protected ItemStack getItemInUse_Mod() {
 		Field itemInUse = null;
 
 		try {
-			itemInUse = EntityPlayer.class.getDeclaredFields()[31];
+			itemInUse = Reflector.getField(EntityPlayer.class, this, Reflector.isRenameTable() ? "itemInUse" : "field_71074_e");
 		} catch (Exception e) {
 			e.printStackTrace();
 			itemInUse = null;
@@ -160,17 +161,21 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 
 	@Override
 	protected void onItemUseFinish() {
-		ItemStack prevItem = this.getItemInUseMod();
+		ItemStack prevItem = this.getItemInUse_Mod();
 		super.onItemUseFinish();
 
 		// water bottle
-		if (prevItem != null && BreathRecoveryItemAPI.match(prevItem)) {
-			int prevAir = this.getAir();
+		if (prevItem != null) {
+			int amount = BreathRecoveryItemAPI.getAmount(prevItem);
 
-			if (prevAir + 100 < 300) {
-				this.setAir(prevAir + 100);
-			} else {
-				this.setAir(300);
+			if (amount > 0) {
+				int air = this.getAir();
+
+				if (air + amount < 300) {
+					this.setAir(air + amount);
+				} else {
+					this.setAir(300);
+				}
 			}
 		}
 	}

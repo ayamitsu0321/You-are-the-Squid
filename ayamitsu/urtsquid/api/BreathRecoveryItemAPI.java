@@ -21,18 +21,22 @@ public final class BreathRecoveryItemAPI {
 		handlers.remove(handler);
 	}
 
-	public static boolean match(ItemStack itemStack) {
+	public static int getAmount(ItemStack itemStack) {
 		for (BreathRecoveryItemHandler handler : handlers) {
-			if (handler.match(itemStack)) {
-				return true;
+			int amount = handler.amount(itemStack);
+
+			if (amount > 0) {
+				return amount;
 			}
 		}
 
-		return false;
+		return 0;
 	}
 
 	public static interface BreathRecoveryItemHandler {
-		boolean match(ItemStack itemStack);
+
+		int amount(ItemStack itemStack);
+
 	}
 
 	static
@@ -40,9 +44,8 @@ public final class BreathRecoveryItemAPI {
 		register(new BreathRecoveryItemHandler() {
 
 			@Override
-			public boolean match(ItemStack itemStack) {
-				// water bottle
-				return itemStack.itemID == Item.potion.itemID && itemStack.getItemDamage() == 0;
+			public int amount(ItemStack itemStack) {
+				return itemStack.itemID == Item.potion.itemID && itemStack.getItemDamage() == 0 ? 100 : 0;
 			}
 		});
 	}
