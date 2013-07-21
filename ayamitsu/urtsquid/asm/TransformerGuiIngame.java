@@ -2,17 +2,16 @@ package ayamitsu.urtsquid.asm;
 
 import java.util.List;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import cpw.mods.fml.relauncher.FMLRelauncher;
-import cpw.mods.fml.relauncher.IClassTransformer;
+import ayamitsu.util.reflect.Reflector;
+
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TransformerGuiIngame extends TransformerBase {
 
@@ -20,7 +19,7 @@ public class TransformerGuiIngame extends TransformerBase {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
-		if (!FMLRelauncher.side().equals("CLIENT") || !transformedName.equals(GUIINGAME_CLASS_NAME)) {
+		if (FMLLaunchHandler.side() != Side.CLIENT || !transformedName.equals(GUIINGAME_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -34,7 +33,7 @@ public class TransformerGuiIngame extends TransformerBase {
 	private byte[] transformGuiIngame(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
 
-		String targetMethodName = "func_73830_a";// renderGameOverlay
+		String targetMethodName = Reflector.isRenameTable() ? "renderGameOverlay" : "func_73830_a";// renderGameOverlay
 		String targetMethodDesc = "(FZII)V";// void (float, boolean, int, int)
 		MethodNode targetMethodNode = null;
 

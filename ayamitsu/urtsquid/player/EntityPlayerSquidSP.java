@@ -3,10 +3,12 @@ package ayamitsu.urtsquid.player;
 import java.util.List;
 
 import ayamitsu.urtsquid.network.PacketHandler;
+import ayamitsu.util.reflect.Reflector;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,6 +17,7 @@ import net.minecraft.entity.player.EnumStatus;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
 import net.minecraft.world.World;
 
@@ -43,12 +46,13 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 
 	public EntityPlayerSquidSP(Minecraft par1Minecraft, World par2World, Session par3Session, NetClientHandler par4NetClientHandler) {
 		super(par1Minecraft, par2World, par3Session, par4NetClientHandler);
-		this.skinUrl = null;
-		this.texture = "/mob/squid.png";
+		//this.skinUrl = null;
+		//this.texture = "/mob/squid.png";
 		this.setSize(0.75F, 0.95F);
 		this.yOffset = 0.425F;
 		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
 		this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
+		Reflector.setPrivateValue(AbstractClientPlayer.class, this, "field_110312_d", new ResourceLocation("textures/entity/squid.png"));
 	}
 
 	@Override
@@ -58,7 +62,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 
 	@Override
 	public float getEyeHeight() {
-		return 0.12F;//this.yOffset;//this.height * 0.5F;//this.yOffset;//this.height * 0.85F;// this.yOffset// 0.12F
+		return 0.12F;
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 			this.rotationPitch = 0.0F;
 		}
 
-		this.setEntityHealth(this.getMaxHealth());
+		this.setEntityHealth(this.func_110143_aJ());
 		this.deathTime = 0;
 	}
 
@@ -100,17 +104,17 @@ public class EntityPlayerSquidSP extends EntityClientPlayerMP {
 		double var10 = par1 - (double)var7;
 		double var12 = par3 - (double)var8;
 		double var14 = par5 - (double)var9;
-		List var16 = this.worldObj.getAllCollidingBoundingBoxes(this.boundingBox);
+		List var16 = this.worldObj.getCollidingBlockBounds(this.boundingBox);
 
-		if (var16.isEmpty() && !this.worldObj.func_85174_u(var7, var8, var9)) {
+		if (var16.isEmpty() && !this.worldObj.isBlockFullCube(var7, var8, var9)) {
 			return false;
 		} else {
-			boolean var17 = !this.worldObj.func_85174_u(var7 - 1, var8, var9);
-			boolean var18 = !this.worldObj.func_85174_u(var7 + 1, var8, var9);
-			boolean var19 = !this.worldObj.func_85174_u(var7, var8 - 1, var9);
-			boolean var20 = !this.worldObj.func_85174_u(var7, var8 + 1, var9);
-			boolean var21 = !this.worldObj.func_85174_u(var7, var8, var9 - 1);
-			boolean var22 = !this.worldObj.func_85174_u(var7, var8, var9 + 1);
+			boolean var17 = !this.worldObj.isBlockFullCube(var7 - 1, var8, var9);
+			boolean var18 = !this.worldObj.isBlockFullCube(var7 + 1, var8, var9);
+			boolean var19 = !this.worldObj.isBlockFullCube(var7, var8 - 1, var9);
+			boolean var20 = !this.worldObj.isBlockFullCube(var7, var8 + 1, var9);
+			boolean var21 = !this.worldObj.isBlockFullCube(var7, var8, var9 - 1);
+			boolean var22 = !this.worldObj.isBlockFullCube(var7, var8, var9 + 1);
 			byte var23 = 3;
 			double var24 = 9999.0D;
 

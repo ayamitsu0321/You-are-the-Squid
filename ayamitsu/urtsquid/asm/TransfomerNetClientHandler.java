@@ -2,17 +2,16 @@ package ayamitsu.urtsquid.asm;
 
 import java.util.List;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 
-import cpw.mods.fml.relauncher.FMLRelauncher;
-import cpw.mods.fml.relauncher.IClassTransformer;
+import ayamitsu.util.reflect.Reflector;
+
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TransfomerNetClientHandler extends TransformerBase {
 
@@ -20,7 +19,7 @@ public class TransfomerNetClientHandler extends TransformerBase {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
-		if (!FMLRelauncher.side().equals("CLIENT") || !transformedName.equals(NETCLIENTHANDLER_CLASS_NAME)) {
+		if (FMLLaunchHandler.side() != Side.CLIENT || !transformedName.equals(NETCLIENTHANDLER_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -34,7 +33,7 @@ public class TransfomerNetClientHandler extends TransformerBase {
 	private byte[] transformNetClientHandler(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
 
-		String targetMethodName = "func_72455_a";// handleLogin
+		String targetMethodName = Reflector.isRenameTable() ? "handleLogin" : "func_72455_a";// handleLogin
 		String targetMethodDesc = "(Lnet/minecraft/network/packet/Packet1Login;)V";// void (Packet1Login)
 		MethodNode targetMethodNode = null;
 

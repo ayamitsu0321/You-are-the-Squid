@@ -9,9 +9,11 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
-import cpw.mods.fml.relauncher.FMLRelauncher;
+import ayamitsu.util.reflect.Reflector;
+
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TransformerEntityRenderer extends TransformerBase {
 
@@ -19,7 +21,7 @@ public class TransformerEntityRenderer extends TransformerBase {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
-		if (!FMLRelauncher.side().equals("CLIENT") || !transformedName.equals(ENTITYRENDERER_CLASS_NAME)) {
+		if (FMLLaunchHandler.side() != Side.CLIENT || !transformedName.equals(ENTITYRENDERER_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -37,7 +39,7 @@ public class TransformerEntityRenderer extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// orientCamera (F)V
-			if ("func_78467_g".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(F)V".equals(mNode.desc)) {
+			if ((Reflector.isRenameTable() ? "orientCamera" : "func_78467_g").equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(F)V".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {

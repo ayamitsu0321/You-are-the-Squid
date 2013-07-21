@@ -2,16 +2,13 @@ package ayamitsu.urtsquid.asm;
 
 import java.util.List;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 
-import cpw.mods.fml.relauncher.IClassTransformer;
+import ayamitsu.util.reflect.Reflector;
 
 public class TransformerServerConfigurationManager extends TransformerBase {
 
@@ -33,7 +30,7 @@ public class TransformerServerConfigurationManager extends TransformerBase {
 	private byte[] transformServerConfigurationManager(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
 
-		String targetMethodName = "func_72366_a";// createPlayerForUser
+		String targetMethodName = Reflector.isRenameTable() ? "createPlayerForUser" : "func_72366_a";// createPlayerForUser
 		String targetMethodDesc = "(Ljava/lang/String;)Lnet/minecraft/entity/player/EntityPlayerMP;";//"(Ljava/lang/String;)Lnet/minecraft/entity/player/EntityPlayerMP;";
 		MethodNode targetMethodNode = null;
 

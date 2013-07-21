@@ -1,8 +1,5 @@
 package ayamitsu.urtsquid.player;
 
-import ayamitsu.urtsquid.network.PacketHandler;
-import ayamitsu.urtsquid.util.Reflector;
-import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.NetClientHandler;
@@ -10,12 +7,10 @@ import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet16BlockItemSwitch;
-import net.minecraft.util.EnumMovingObjectType;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import ayamitsu.urtsquid.network.PacketHandler;
+import ayamitsu.util.reflect.Reflector;
 
 public class PlayerControllerSquid extends PlayerControllerMP {
 
@@ -30,7 +25,7 @@ public class PlayerControllerSquid extends PlayerControllerMP {
 
 	@Override
 	public EntityClientPlayerMP func_78754_a(World par1World) {
-		return new EntityPlayerSquidSP(this.mc, par1World, this.mc.session, this.netClientHandler);
+		return new EntityPlayerSquidSP(this.mc, par1World, this.mc.func_110432_I(), this.netClientHandler);
 	}
 
 	@Override

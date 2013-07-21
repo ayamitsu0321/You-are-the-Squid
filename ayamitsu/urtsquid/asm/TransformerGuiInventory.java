@@ -2,9 +2,6 @@ package ayamitsu.urtsquid.asm;
 
 import java.util.List;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -13,8 +10,8 @@ import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import cpw.mods.fml.relauncher.FMLRelauncher;
-import cpw.mods.fml.relauncher.IClassTransformer;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TransformerGuiInventory extends TransformerBase {
 
@@ -22,7 +19,7 @@ public class TransformerGuiInventory extends TransformerBase {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
-		if (!FMLRelauncher.side().equals("CLIENT") || !transformedName.equals(GUIINVENTORY_CLASS_NAME)) {
+		if (FMLLaunchHandler.side() != Side.CLIENT || !transformedName.equals(GUIINVENTORY_CLASS_NAME)) {
 			return bytes;
 		}
 
@@ -35,8 +32,8 @@ public class TransformerGuiInventory extends TransformerBase {
 
 	private byte[] transformGuiInventory(byte[] bytes) {
 		ClassNode cNode = this.encode(bytes);
-		String targetMethodName = "func_74223_a";// func_74223_a
-		String targetMethodDesc = "(Lnet/minecraft/client/Minecraft;IIIFF)V";// (Lnet/minecraft/client/Minecraft;IIIFF)V
+		String targetMethodName = "func_110423_a";// func_110423_a
+		String targetMethodDesc = "(IIIFFLnet/minecraft/entity/EntityLivingBase;)V";// (IIIFFLnet/minecraft/entity/EntityLivingBase;)V
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(this.mapMethodDesc(mNode.desc))) {

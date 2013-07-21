@@ -2,16 +2,12 @@ package ayamitsu.urtsquid.asm;
 
 import java.util.List;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import cpw.mods.fml.relauncher.IClassTransformer;
+import ayamitsu.util.reflect.Reflector;
 
 /**
  * transform 1.62 to 0.425(player's yOffset)
@@ -49,7 +45,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// <init> (LWorld;LEntityPlayer;)V
-			if ("<init>".equals(mNode.name) && "(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)V".equals(mNode.desc)) {
+			if (("<init>").equals(mNode.name) && "(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)V".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -73,7 +69,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// getMovingObjectPositionFromPlayer (LWorld;LEntityPlayer;Z)LMovingObjectPosition;
-			if ("func_77621_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;Z)Lnet/minecraft/util/MovingObjectPosition;".equals(this.mapMethodDesc(mNode.desc))) {
+			if ((Reflector.isRenameTable() ? "getMovingObjectPositionFromPlayer" : "func_77621_a").equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;Z)Lnet/minecraft/util/MovingObjectPosition;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -100,7 +96,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("func_77659_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
+			if ((Reflector.isRenameTable() ? "onItemRightClick" : "func_77659_a").equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -127,7 +123,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("func_77659_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
+			if ((Reflector.isRenameTable() ? "onItemRightClick" : "func_77659_a").equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -154,7 +150,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// onItemRightClick (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;
-			if ("func_77659_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
+			if ((Reflector.isRenameTable() ? "onItemRightClick" : "func_77659_a").equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;".equals(this.mapMethodDesc(mNode.desc))) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {
@@ -181,7 +177,7 @@ public class Transformer162Ldc extends TransformerBase {
 
 		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			// setPlayerLocation (DDDFF)V
-			if ("func_72569_a".equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(DDDFF)V".equals(mNode.desc)) {
+			if ((Reflector.isRenameTable() ? "setPlayerLocation" : "func_72569_a").equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && "(DDDFF)V".equals(mNode.desc)) {
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();
 
 				for (int i = 0; i < insnList.length; i++) {

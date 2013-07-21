@@ -4,13 +4,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import net.minecraft.launchwrapper.IClassTransformer;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import cpw.mods.fml.relauncher.IClassTransformer;
 
 public abstract class TransformerBase implements IClassTransformer, Opcodes {
 

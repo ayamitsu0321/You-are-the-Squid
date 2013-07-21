@@ -1,5 +1,7 @@
 package ayamitsu.urtsquid.asm;
 
+import java.util.List;
+
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -28,7 +30,7 @@ public class TransformerEntityPlayer extends TransformerBase {
 		String targetMethodName = "func_71056_a";// verifyRespawnCoordinates
 		String targetMethodDesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/ChunkCoordinates;Z)Lnet/minecraft/util/ChunkCoordinates;";// (Lnet/minecraft/world/World;Lnet/minecraft/util/ChunkCoordinates;Z)Lnet/minecraft/util/ChunkCoordinates;
 
-		for (MethodNode mNode : cNode.methods) {
+		for (MethodNode mNode : (List<MethodNode>)cNode.methods) {
 			if (targetMethodName.equals(this.mapMethodName(cNode.name, mNode.name, mNode.desc)) && targetMethodDesc.equals(this.mapMethodDesc(mNode.desc))) {
 
 				AbstractInsnNode[] insnList = mNode.instructions.toArray();

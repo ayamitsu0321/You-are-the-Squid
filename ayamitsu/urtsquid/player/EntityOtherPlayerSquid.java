@@ -27,12 +27,12 @@ public class EntityOtherPlayerSquid extends EntityOtherPlayerMP {
 
 	public EntityOtherPlayerSquid(World world, String name) {
 		super(world, name);
-		this.texture = "/mob/squid.png";
+		//this.texture = "/mob/squid.png";
 		this.setSize(0.75F, 0.95F);
 		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
 		this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
 	}
-	
+
 	@Override
 	public boolean canBreatheUnderwater() {
 		return true;

@@ -1,15 +1,20 @@
 package ayamitsu.urtsquid.client;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 import ayamitsu.urtsquid.player.EntityPlayerSquidSP;
-import ayamitsu.urtsquid.util.Reflector;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class RenderPlayerSquid extends RenderPlayer {
+
+	protected static final ResourceLocation TEXTURE_SQUID = new ResourceLocation("textures/entity/squid.png");
 
 	public RenderPlayerSquid() {
 		super();
@@ -22,12 +27,17 @@ public class RenderPlayerSquid extends RenderPlayer {
 	}
 
 	@Override
-	protected int setArmorModel(EntityPlayer par1EntityPlayer, int par2, float par3) {
+	protected int setArmorModel(AbstractClientPlayer par1AbstractClientPlayer, int par2, float par3) {
 		return -1;
 	}
 
 	@Override
-	protected void rotatePlayer(EntityPlayer player, float par2, float par3, float par4) {
+	protected ResourceLocation func_110775_a(Entity par1Entity) {
+		return TEXTURE_SQUID;
+	}
+
+	@Override
+	protected void rotatePlayer(AbstractClientPlayer player, float par2, float par3, float par4) {
 		EntityPlayerSquidSP squid = (EntityPlayerSquidSP)player;
 
         if (player.isEntityAlive() && player.isPlayerSleeping())
@@ -67,7 +77,8 @@ public class RenderPlayerSquid extends RenderPlayer {
     }
 
 	@Override
-    protected float handleRotationFloat(EntityLiving par1EntityLiving, float par2) {
-        return this.handleRotationFloat((EntityPlayerSquidSP)par1EntityLiving, par2);
+    protected float handleRotationFloat(EntityLivingBase living, float par2) {
+        return this.handleRotationFloat((EntityPlayerSquidSP)living, par2);
     }
+
 }

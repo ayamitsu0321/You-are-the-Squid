@@ -5,23 +5,17 @@ import java.lang.reflect.Field;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.EnumStatus;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import ayamitsu.urtsquid.api.BreathRecoveryItemAPI;
-import ayamitsu.urtsquid.URTSquid;
-import ayamitsu.urtsquid.network.PacketHandler;
-import ayamitsu.urtsquid.util.Reflector;
+import ayamitsu.util.reflect.Reflector;
 
 public class EntityPlayerSquidMP extends EntityPlayerMP {
 
@@ -29,7 +23,7 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 
 	public EntityPlayerSquidMP(MinecraftServer mcServer, World world, String username, ItemInWorldManager itemInWorldManager) {
 		super(mcServer, world, username, itemInWorldManager);
-		this.texture = "/mob/squid.png";
+		//this.texture = "/mob/squid.png";
 		this.setSize(0.75F, 0.95F);
 		this.yOffset = 0.0F;
 		this.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
@@ -72,7 +66,7 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
 			this.rotationPitch = 0.0F;
 		}
 
-		this.setEntityHealth(this.getMaxHealth());
+		this.setEntityHealth(this.func_110143_aJ());// getMaxHealth
 		this.deathTime = 0;
 	}
 
