@@ -82,7 +82,7 @@ public class EntityOtherPlayerSquid extends EntityOtherPlayerMP {
         int air = this.getAir();
         super.onEntityUpdate();
 
-        if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.water) && !this.isPotionActive(MobEffects.waterBreathing) && !this.capabilities.disableDamage) {
+        if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.WATER) && !this.isPotionActive(MobEffects.WATER_BREATHING) && !this.capabilities.disableDamage) {
             --air;
             this.setAir(air);
 

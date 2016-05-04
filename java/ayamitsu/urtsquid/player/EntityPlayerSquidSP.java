@@ -82,7 +82,7 @@ public class EntityPlayerSquidSP extends EntityPlayerSP {
             while (this.posY > 0.0D && this.posY < 256.0D) {
                 this.setPosition(this.posX, this.posY, this.posZ);
 
-                if (this.worldObj.getCubes(this, this.getEntityBoundingBox()).isEmpty()) {
+                if (this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty()) {
                     break;
                 }
 
@@ -176,7 +176,7 @@ public class EntityPlayerSquidSP extends EntityPlayerSP {
     public float getBreakSpeed(IBlockState state, BlockPos pos) {
         float breakSpeed = super.getBreakSpeed(state, pos);
 
-        if (this.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(this)) {
+        if (this.isInsideOfMaterial(Material.WATER) && !EnchantmentHelper.getAquaAffinityModifier(this)) {
             breakSpeed *= 5.0F;
         }
 
@@ -195,7 +195,7 @@ public class EntityPlayerSquidSP extends EntityPlayerSP {
         int air = this.getAir();
         super.onEntityUpdate();
 
-        if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.water) && !this.isPotionActive(MobEffects.waterBreathing) && !this.capabilities.disableDamage) {
+        if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.WATER) && !this.isPotionActive(MobEffects.WATER_BREATHING) && !this.capabilities.disableDamage) {
             --air;
             this.setAir(air);
 

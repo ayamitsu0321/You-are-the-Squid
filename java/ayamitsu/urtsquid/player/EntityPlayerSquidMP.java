@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.server.MinecraftServer;
@@ -82,7 +81,7 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
     public float getBreakSpeed(IBlockState state, BlockPos pos) {
         float breakSpeed = super.getBreakSpeed(state, pos);
 
-        if (this.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(this)) {
+        if (this.isInsideOfMaterial(Material.WATER) && !EnchantmentHelper.getAquaAffinityModifier(this)) {
             breakSpeed *= 5.0F;
         }
 
@@ -101,7 +100,7 @@ public class EntityPlayerSquidMP extends EntityPlayerMP {
         int air = this.getAir();
         super.onEntityUpdate();
 
-        if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.water) && !this.isPotionActive(MobEffects.waterBreathing) && !this.capabilities.disableDamage) {
+        if (this.isEntityAlive() && !this.isInsideOfMaterial(Material.WATER) && !this.isPotionActive(MobEffects.WATER_BREATHING) && !this.capabilities.disableDamage) {
             --air;
             this.setAir(air);
 
