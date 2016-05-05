@@ -24,7 +24,7 @@ public class TransformerGuiIngameForge extends TransformerBase {
             }
         };
 
-        ClassVisitor classVisitor = new ClassAdapter(transformedName, classWriter) {
+        ClassVisitor classVisitor = new ClassAdapter(name, classWriter) {
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);

@@ -1,7 +1,10 @@
 package ayamitsu.urtsquid.asm.transformer;
 
+import com.google.common.collect.Sets;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.*;
+
+import java.util.Set;
 
 /**
  * Created by ayamitsu0321 on 2016/03/20.
@@ -23,16 +26,18 @@ public class TransformerBlockBed extends TransformerBase {
             }
         };
 
-        ClassVisitor classVisitor = new ClassAdapter(transformedName, classWriter) {
+        ClassVisitor classVisitor = new ClassAdapter(name, classWriter) {
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
 
+                Set<String> targetMethodNames = Sets.newHashSet("func_176469_d", "hasRoomForPlayer");
+                String targetMethodDesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z";
                 String deobfName = mapMethodName(owner, name, desc);
                 String deobfDesc = mapMethodDesc(desc);
-                String deobfMethod = deobfName + deobfDesc;
+                System.out.println("Debug:\n" + "owner[" + owner + "]\nname[" + name + ", " + deobfName + "]\ndesc[" + desc + ", " + deobfDesc + "]");
 
-                if (("hasRoomForPlayer(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z").equals(deobfMethod)) {
+                if (targetMethodNames.contains(deobfName) && targetMethodDesc.equals(deobfDesc)) {
                     methodVisitor = new MethodVisitor(ASM4, methodVisitor) {
 
                         /** コードを丸ごと書き換え
@@ -59,16 +64,16 @@ public class TransformerBlockBed extends TransformerBase {
                             mv.visitLineNumber(221, l0);
                             mv.visitVarInsn(ALOAD, 0);
                             mv.visitVarInsn(ALOAD, 1);
-                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/util/math/BlockPos", "down", "()Lnet/minecraft/util/math/BlockPos;", false);
-                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", "getBlockState", "(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/state/IBlockState;", false);
-                            mv.visitMethodInsn(INVOKEINTERFACE, "net/minecraft/block/state/IBlockState", "isFullyOpaque", "()Z", true);
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/util/math/BlockPos", TransformerBase.isDeobfuscated() ? "down" : "func_177977_b", "()Lnet/minecraft/util/math/BlockPos;", false);
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", TransformerBase.isDeobfuscated() ? "getBlockState" : "func_180495_p", "(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/state/IBlockState;", false);
+                            mv.visitMethodInsn(INVOKEINTERFACE, "net/minecraft/block/state/IBlockState", TransformerBase.isDeobfuscated() ? "isFullyOpaque" : "func_185896_q", "()Z", true);
                             Label l1 = new Label();
                             mv.visitJumpInsn(IFEQ, l1);
                             mv.visitVarInsn(ALOAD, 0);
                             mv.visitVarInsn(ALOAD, 1);
-                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", "getBlockState", "(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/state/IBlockState;", false);
-                            mv.visitMethodInsn(INVOKEINTERFACE, "net/minecraft/block/state/IBlockState", "getMaterial", "()Lnet/minecraft/block/material/Material;", true);
-                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/block/material/Material", "isSolid", "()Z", false);
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", TransformerBase.isDeobfuscated() ? "getBlockState" : "func_180495_p", "(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/state/IBlockState;", false);
+                            mv.visitMethodInsn(INVOKEINTERFACE, "net/minecraft/block/state/IBlockState", TransformerBase.isDeobfuscated() ? "getMaterial" : "func_185904_a", "()Lnet/minecraft/block/material/Material;", true);
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/block/material/Material", TransformerBase.isDeobfuscated() ? "isSolid" : "func_76220_a", "()Z", false);
                             mv.visitJumpInsn(IFNE, l1);
                             /*
                             mv.visitVarInsn(ALOAD, 0);

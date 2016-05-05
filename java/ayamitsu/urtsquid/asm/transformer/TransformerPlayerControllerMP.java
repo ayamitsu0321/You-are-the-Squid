@@ -1,10 +1,13 @@
 package ayamitsu.urtsquid.asm.transformer;
 
+import com.google.common.collect.Sets;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
+
+import java.util.Set;
 
 /**
  * Created by ayamitsu0321 on 2016/03/20.
@@ -26,16 +29,17 @@ public class TransformerPlayerControllerMP extends TransformerBase {
             }
         };
 
-        ClassVisitor classVisitor = new ClassAdapter(transformedName, classWriter) {
+        ClassVisitor classVisitor = new ClassAdapter(name, classWriter) {
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
 
+                Set<String> targetMethodNames = Sets.newHashSet("func_178892_a", "createClientPlayer");
+                String targetMethodDesc = "(Lnet/minecraft/world/World;Lnet/minecraft/stats/StatFileWriter;)Lnet/minecraft/client/entity/EntityPlayerSP;";
                 String deobfName = mapMethodName(owner, name, desc);
                 String deobfDesc = mapMethodDesc(desc);
-                String deobfMethod = deobfName + deobfDesc;
 
-                if (("createClientPlayer(Lnet/minecraft/world/World;Lnet/minecraft/stats/StatFileWriter;)Lnet/minecraft/client/entity/EntityPlayerSP;").equals(deobfMethod)) {
+                if (targetMethodNames.contains(deobfName) && targetMethodDesc.equals(deobfDesc)) {
                     methodVisitor = new MethodVisitor(ASM4, methodVisitor) {
 
                         @Override
@@ -54,7 +58,7 @@ public class TransformerPlayerControllerMP extends TransformerBase {
 
                         @Override
                         public void visitTypeInsn(int opcode, String type) {
-                            if (opcode == NEW && ("net/minecraft/client/entity/EntityPlayerSP").equals(type)) {
+                            if (opcode == NEW && ("net/minecraft/client/entity/EntityPlayerSP").equals(mapType(type))) {
                                 super.visitTypeInsn(opcode, "ayamitsu/urtsquid/player/EntityPlayerSquidSP");
                                 return;
                             }

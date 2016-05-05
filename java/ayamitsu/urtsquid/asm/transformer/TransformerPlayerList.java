@@ -1,10 +1,13 @@
 package ayamitsu.urtsquid.asm.transformer;
 
+import com.google.common.collect.Sets;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
+
+import java.util.Set;
 
 /**
  * Created by ayamitsu0321 on 2016/03/20.
@@ -26,17 +29,21 @@ public class TransformerPlayerList extends TransformerBase {
             }
         };
 
-        ClassVisitor classVisitor = new ClassAdapter(transformedName, classWriter) {
+        ClassVisitor classVisitor = new ClassAdapter(name, classWriter) {
 
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
 
+                Set<String> targetMethodNames_0 = Sets.newHashSet("func_148545_a", "createPlayerForUser");
+                String targetMethodDesc_0 = "(Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/entity/player/EntityPlayerMP;";
+                Set<String> targetMethodNames_1 = Sets.newHashSet("func_72368_a", "recreatePlayerEntity");
+                String targetMethodDesc_1 = "(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;";
                 String deobfName = mapMethodName(owner, name, desc);
                 String deobfDesc = mapMethodDesc(desc);
-                String deobfMethod = deobfName + deobfDesc;
+                System.out.println("Debug:\n" + "owner[" + owner + "]\nname[" + name + ", " + deobfName + "]\ndesc[" + desc + ", " + deobfDesc + "]");
 
-                if (("createPlayerForUser(Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/entity/player/EntityPlayerMP;").equals(deobfMethod)) {
+                if (targetMethodNames_0.contains(deobfName) && targetMethodDesc_0.equals(deobfDesc)) {
                     methodVisitor = new MethodVisitor(ASM4, methodVisitor) {
 
                         @Override
@@ -55,7 +62,7 @@ public class TransformerPlayerList extends TransformerBase {
 
                         @Override
                         public void visitTypeInsn(int opcode, String type) {
-                            if (opcode == NEW && ("net/minecraft/entity/player/EntityPlayerMP").equals(type)) {
+                            if (opcode == NEW && ("net/minecraft/entity/player/EntityPlayerMP").equals(mapType(type))) {
                                 super.visitTypeInsn(opcode, "ayamitsu/urtsquid/player/EntityPlayerSquidMP");
                                 return;
                             }
@@ -64,7 +71,7 @@ public class TransformerPlayerList extends TransformerBase {
                         }
 
                     };
-                } else if (("recreatePlayerEntity(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;").equals(deobfMethod)) {
+                } else if (targetMethodNames_1.contains(deobfName) && targetMethodDesc_1.equals(deobfDesc)) {
                     methodVisitor = new MethodVisitor(ASM4, methodVisitor) {
 
                         @Override
@@ -83,7 +90,7 @@ public class TransformerPlayerList extends TransformerBase {
 
                         @Override
                         public void visitTypeInsn(int opcode, String type) {
-                            if (opcode == NEW && ("net/minecraft/entity/player/EntityPlayerMP").equals(type)) {
+                            if (opcode == NEW && ("net/minecraft/entity/player/EntityPlayerMP").equals(mapType(type))) {
                                 super.visitTypeInsn(opcode, "ayamitsu/urtsquid/player/EntityPlayerSquidMP");
                                 return;
                             }

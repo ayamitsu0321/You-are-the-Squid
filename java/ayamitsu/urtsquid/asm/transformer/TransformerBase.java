@@ -2,8 +2,10 @@ package ayamitsu.urtsquid.asm.transformer;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import net.minecraftforge.fml.relauncher.CoreModManager;
 import org.objectweb.asm.Opcodes;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -12,9 +14,32 @@ import java.util.Map;
  */
 public abstract class TransformerBase implements IClassTransformer, Opcodes {
 
+    private static boolean deobfuscatedEnvironment;
+
+    public static boolean isDeobfuscated() {
+        return deobfuscatedEnvironment;
+    }
+
+    static {
+        boolean flag = false;
+
+        try {
+            Field field = CoreModManager.class.getField("deobfuscatedEnvironment");
+            field.setAccessible(true);
+            flag = field.getBoolean(null);
+            field.setAccessible(false);
+        } catch (Exception e) {
+            flag = false;
+        }
+
+        deobfuscatedEnvironment = flag;
+    }
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
         if (!isTarget(name, transformedName)) return bytes;
+
+        System.out.println("Start transform: " + transformedName);
 
         return transformTarget(name, transformedName, bytes);
     }
@@ -46,10 +71,10 @@ public abstract class TransformerBase implements IClassTransformer, Opcodes {
         return FMLDeobfuscatingRemapper.INSTANCE.map(typeName);
     }
 
-	/*protected String mapType(String type)
+	public static String mapType(String type)
     {
 		return FMLDeobfuscatingRemapper.INSTANCE.mapType(type);
-	}*/
+	}
 
     public static String mapMethodName(String owner, String name, String desc) {
         return FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(owner, name, desc);

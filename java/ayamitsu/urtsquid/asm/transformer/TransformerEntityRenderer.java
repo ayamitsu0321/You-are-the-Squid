@@ -1,10 +1,13 @@
 package ayamitsu.urtsquid.asm.transformer;
 
+import com.google.common.collect.Sets;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
+
+import java.util.Set;
 
 /**
  * Created by ayamitsu0321 on 2016/03/20.
@@ -26,16 +29,17 @@ public class TransformerEntityRenderer extends TransformerBase {
             }
         };
 
-        ClassVisitor classVisitor = new ClassAdapter(transformedName, classWriter) {
+        ClassVisitor classVisitor = new ClassAdapter(name, classWriter) {
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
 
+                Set<String> targetMethosNames = Sets.newHashSet("func_78467_g", "orientCamera");
+                String targetMethodDesc = "(F)V";
                 String deobfName = mapMethodName(owner, name, desc);
                 String deobfDesc = mapMethodDesc(desc);
-                String deobfMethod = deobfName + deobfDesc;
 
-                if (("orientCamera(F)V").equals(deobfMethod)) {
+                if (targetMethosNames.contains(deobfName) && targetMethodDesc.equals(deobfDesc)) {
                     methodVisitor = new MethodAdapter(ASM4, methodVisitor) {
 
                         @Override
@@ -47,13 +51,13 @@ public class TransformerEntityRenderer extends TransformerBase {
                             /** コードの追加
                              * GlStateManager.translate(0.0F, entity.getEyeHeight() - 1.62F, 0.0F)
                              */
-                            if (!this.endExcute && opcode == INVOKESTATIC && ("net/minecraft/client/renderer/GlStateManager").equals(deobfOwner) && ("translate".equals(deobfMethodName))) {
+                            if (!this.endExcute && opcode == INVOKESTATIC && ("net/minecraft/client/renderer/GlStateManager").equals(deobfOwner) && ("translate".equals(deobfMethodName) || "func_179109_b".equals(deobfMethodName))) {
                                 super.visitInsn(FCONST_0);
 
                                 /** entity.getEyeHeight() - 1.62 */
                                 super.visitLdcInsn(Float.valueOf(1.0F));
                                 super.visitVarInsn(ALOAD, 2);// Minecraft#getRenderViewEntity
-                                super.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/entity/Entity", "getEyeHeight", "()F", false);// Entity#getEyeHeight
+                                super.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/entity/Entity", TransformerBase.isDeobfuscated() ? "getEyeHeight" : "func_70047_e", "()F", false);// Entity#getEyeHeight
                                 super.visitInsn(FSUB);
 
                                 super.visitInsn(FCONST_0);
