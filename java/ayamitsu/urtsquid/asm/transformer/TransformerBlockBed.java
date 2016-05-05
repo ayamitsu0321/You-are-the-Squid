@@ -35,7 +35,6 @@ public class TransformerBlockBed extends TransformerBase {
                 String targetMethodDesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z";
                 String deobfName = mapMethodName(owner, name, desc);
                 String deobfDesc = mapMethodDesc(desc);
-                System.out.println("Debug:\n" + "owner[" + owner + "]\nname[" + name + ", " + deobfName + "]\ndesc[" + desc + ", " + deobfDesc + "]");
 
                 if (targetMethodNames.contains(deobfName) && targetMethodDesc.equals(deobfDesc)) {
                     methodVisitor = new MethodVisitor(ASM4, methodVisitor) {

@@ -41,7 +41,6 @@ public class TransformerPlayerList extends TransformerBase {
                 String targetMethodDesc_1 = "(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;";
                 String deobfName = mapMethodName(owner, name, desc);
                 String deobfDesc = mapMethodDesc(desc);
-                System.out.println("Debug:\n" + "owner[" + owner + "]\nname[" + name + ", " + deobfName + "]\ndesc[" + desc + ", " + deobfDesc + "]");
 
                 if (targetMethodNames_0.contains(deobfName) && targetMethodDesc_0.equals(deobfDesc)) {
                     methodVisitor = new MethodVisitor(ASM4, methodVisitor) {
