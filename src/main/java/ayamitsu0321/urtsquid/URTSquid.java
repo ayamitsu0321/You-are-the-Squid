@@ -21,7 +21,7 @@ import java.util.Map;
 @Mod(URTSquid.MODID)
 public class URTSquid {
 
-    public static final String MODID = "ayamitsu0321_urtsquid";
+    public static final String MODID = "urtsquid";
 
     /** squid size */
     public static final EntitySize STANDING_SIZE = EntitySize.flexible(0.8F, 0.6F);
