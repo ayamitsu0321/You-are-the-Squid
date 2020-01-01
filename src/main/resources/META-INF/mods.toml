@@ -2,7 +2,7 @@ modLoader="javafml" #mandatory
 loaderVersion="[28,)" #mandatory (28 is current forge version)
 issueTrackerURL="https://github.com/ayamitsu0321/You-are-the-Squid/issues" #optional
 [[mods]] #mandatory
-modId="ayamitsu0321_urtsquid" #mandatory
+modId="urtsquid" #mandatory
 version="${version}" #mandatory
 displayName="URTSquid Mod" #mandatory
 #updateJSONURL="" #optional
