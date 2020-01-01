@@ -154,6 +154,19 @@ publishing {
     }
 }
 
+// Create Dev Jar
+task devJar(type: Jar, dependsOn: jar) {
+    classifier = 'dev'
+    // For some reason using jar.source puts a copy of the jar's manifest
+    // in the root directory (But not in META-INF). So we add the manifest
+    // manually and then exclude the one in the root directory.
+    from jar.source
+    // No clue why "manifest jar.manifest" fails and "manifest = jar.manifest"
+    // works. The "=" shouldn't change anything, but it does.
+    manifest = jar.manifest
+    exclude jar.excludes + "/MANIFEST.MF"
+}
+
 // Process resources on build
 processResources {
     // This will ensure that this task is redone when the versions change.
@@ -170,4 +183,8 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'META-INF/mods.toml'
     }
+}
+
+artifacts {
+    archives devJar
 }
