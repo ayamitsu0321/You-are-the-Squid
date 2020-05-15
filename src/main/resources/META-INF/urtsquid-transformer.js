@@ -94,7 +94,7 @@ function initializeCoreMod() {
                 "type" : "METHOD",
                 "class" : "net.minecraft.client.network.play.ClientPlayNetHandler",
                 "methodName" : "func_147237_a",
-                "methodDesc" : "(Lnet/minecraft/network/play/server/SRespawnPacket;)V"
+                "methodDesc" : "(Lnet/minecraft/network/play/server/SSpawnPlayerPacket;)V"
             },
             "transformer" : function(methodNode) {
                 injectClientPlayNetHandler_handleSpawnPlayer(methodNode.instructions);
@@ -263,7 +263,7 @@ function injectClientPlayNetHandler_handleSpawnPlayer(instructions) {
     var pointInitPlayer;
     for (i = instructions.indexOf(pointNewInsn); i < arrayLength; i++) {
         var insn = instructions.get(i);
-        if (insn.getOpcode() == INVOKEVIRTUAL && insn instanceof MethodInsnNode) {
+        if (insn.getOpcode() == INVOKESPECIAL && insn instanceof MethodInsnNode) {
             if (insn.owner == "net/minecraft/client/entity/player/RemoteClientPlayerEntity") {
                 if (insn.name == "<init>") {
                     pointInitPlayer = insn;
