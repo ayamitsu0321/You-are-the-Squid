@@ -65,7 +65,7 @@ public class RemoteSquidPlayerEntity extends RemoteClientPlayerEntity implements
             case FALL_FLYING:
             case SPIN_ATTACK:
                 return sizeIn.height / 2.0F * 0.85F;
-            case SNEAKING:
+            case CROUCHING:
                 return sizeIn.height / 3.0F * 2.0F * 0.85F;
             default:
                 return sizeIn.height * 0.85F;
@@ -162,8 +162,8 @@ public class RemoteSquidPlayerEntity extends RemoteClientPlayerEntity implements
             }
 
             Vec3d motionVec = this.getMotion();
-            float lvt_2_1_ = MathHelper.sqrt(func_213296_b(motionVec));
-            double yDistance = this.posY - this.lastTickPosY;
+            float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
+            double yDistance = motionVec.y;
 
             /** yaw */
             this.squidYaw = (float)((double)this.squidYaw + Math.PI * (double)this.rotateSpeed * 1.5D);
@@ -183,8 +183,8 @@ public class RemoteSquidPlayerEntity extends RemoteClientPlayerEntity implements
 
             /** pitch */
             Vec3d motionVec = this.getMotion();
-            float lvt_2_1_ = MathHelper.sqrt(func_213296_b(motionVec));
-            double yDistance = this.posY - this.lastTickPosY;
+            float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
+            double yDistance = motionVec.y;
 
             if (this.isPassenger()) {
                 // up direction

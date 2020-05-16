@@ -69,7 +69,7 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
             case FALL_FLYING:
             case SPIN_ATTACK:
                 return sizeIn.height / 2.0F * 0.85F;
-            case SNEAKING:
+            case CROUCHING:
                 return sizeIn.height / 3.0F * 2.0F * 0.85F;
             default:
                 return sizeIn.height * 0.85F;
@@ -173,8 +173,8 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
             }
 
             Vec3d motionVec = this.getMotion();
-            float lvt_2_1_ = MathHelper.sqrt(func_213296_b(motionVec));
-            double yDistance = this.posY - this.lastTickPosY;
+            float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
+            double yDistance = motionVec.y;//this.posY - this.lastTickPosY;
 
             /** yaw */
             this.squidYaw = (float)((double)this.squidYaw + Math.PI * (double)this.rotateSpeed * 1.5D);
@@ -194,8 +194,8 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
 
             /** pitch */
             Vec3d motionVec = this.getMotion();
-            float lvt_2_1_ = MathHelper.sqrt(func_213296_b(motionVec));
-            double yDistance = this.posY - this.lastTickPosY;
+            float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
+            double yDistance = motionVec.y;//this.posY - this.lastTickPosY;
 
             if (this.isPassenger()) {
                 // up direction
@@ -223,11 +223,16 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
     @Override
     public void travel(Vec3d p_213352_1_) {
         Vec3d motionVec = this.getMotion();
+        Vec3d lookVec = this.getLookVec();
 
         if (!this.isPassenger()) {
             if (!this.isInWater() || this.abilities.isFlying) {
                 ;
+            } else if (this.isSwimming()) {
+                // accelerate swim speed
+                this.setMotion(motionVec.add((lookVec.x - motionVec.x)* 0.085D, 0.0D, (lookVec.z - motionVec.z)* 0.085D));
             } else {
+                // make normal speed in water
                 this.setMotion(motionVec.getX() * 1.1375D, motionVec.getY(), motionVec.getZ() * 1.1375D);
             }
         }

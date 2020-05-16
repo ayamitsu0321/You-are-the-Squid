@@ -3,13 +3,18 @@ package ayamitsu0321.urtsquid.client.renderer.entity;
 import ayamitsu0321.urtsquid.URTSquid;
 import ayamitsu0321.urtsquid.client.renderer.entity.model.SquidPlayerModel;
 import ayamitsu0321.urtsquid.entity.player.ISquidPlayerEntity;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
@@ -42,24 +47,24 @@ public class SquidPlayerRenderer extends PlayerRenderer {
      * @param rotationYaw
      * @param partialTicks
      */
-    protected void applyRotations(ISquidPlayerEntity entityLiving, float ageInTicks, float rotationYaw, float partialTicks) {
+    protected void applyRotations(ISquidPlayerEntity entityLiving, MatrixStack p_225621_2_, float ageInTicks, float rotationYaw, float partialTicks) {
         float f = MathHelper.lerp(partialTicks, entityLiving.getPrevSquidPitch(), entityLiving.getSquidPitch());
         float f1 = MathHelper.lerp(partialTicks, entityLiving.getPrevSquidYaw(), entityLiving.getSquidYaw());
-        GlStateManager.translatef(0.0F, 0.5F, 0.0F);
-        GlStateManager.rotatef(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotatef(f, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotatef(f1, 0.0F, 1.0F, 0.0F);
-        GlStateManager.translatef(0.0F, -1.2F, 0.0F);
+        p_225621_2_.translate(0.0F, 0.5F, 0.0F);
+        p_225621_2_.rotate(Vector3f.YP.rotationDegrees(180.0F - rotationYaw));
+        p_225621_2_.rotate(Vector3f.XP.rotationDegrees(f));
+        p_225621_2_.rotate(Vector3f.YP.rotationDegrees(f1));
+        p_225621_2_.translate(0.0D, -1.2D, 0.0D);
     }
 
     @Override
-    protected void applyRotations(AbstractClientPlayerEntity entityLiving, float ageInTicks, float rotationYaw, float partialTicks) {
+    protected void applyRotations(AbstractClientPlayerEntity entityLiving, MatrixStack p_225621_2_, float ageInTicks, float rotationYaw, float partialTicks) {
         if (entityLiving instanceof ISquidPlayerEntity) {
             // squid player
-            this.applyRotations((ISquidPlayerEntity)entityLiving, ageInTicks, rotationYaw, partialTicks);
+            this.applyRotations((ISquidPlayerEntity)entityLiving, p_225621_2_, ageInTicks, rotationYaw, partialTicks);
         } else {
             // default player
-            super.applyRotations(entityLiving, ageInTicks, rotationYaw, partialTicks);
+            super.applyRotations(entityLiving, p_225621_2_, ageInTicks, rotationYaw, partialTicks);
         }
     }
 
@@ -86,45 +91,31 @@ public class SquidPlayerRenderer extends PlayerRenderer {
     }
 
     @Override
-    public void renderRightArm(AbstractClientPlayerEntity clientPlayer) {
-        float f = 1.0F;
-        float f1 = 0.0625F;// 1.0F / 16.0F
-
-        GlStateManager.color3f(f, f, f);
+    public void renderRightArm(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, AbstractClientPlayerEntity playerIn) {
         SquidPlayerModel<AbstractClientPlayerEntity> playermodel = (SquidPlayerModel<AbstractClientPlayerEntity>)this.getEntityModel();
-        this.setModelVisibilities(clientPlayer);
-        GlStateManager.enableBlend();
-        GlStateManager.translatef(0.0F, 0.0F, 1.0F);
-        playermodel.swingProgress = 0.0F;
-        playermodel.isSneak = false;
-        playermodel.swimAnimation = 0.0F;
-        playermodel.swingProgress = 0.0F;
-        playermodel.isSneak = false;
-        playermodel.setRotationAngles(clientPlayer, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f1);
-        playermodel.squidTentacles[0].render(f1);
-        //this.squidModel.bipedRightArmwear.render(f1);
-        GlStateManager.disableBlend();
+        this.renderItem(matrixStackIn, bufferIn, combinedLightIn, playerIn, playermodel.squidTentacles[0], playermodel.bipedRightArmwear);
     }
 
     @Override
-    public void renderLeftArm(AbstractClientPlayerEntity clientPlayer) {
-        float f = 1.0F;
-        float f1 = 0.0625F;// 1.0F / 16.0F
-
-        GlStateManager.color3f(f, f, f);
+    public void renderLeftArm(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, AbstractClientPlayerEntity playerIn) {
         SquidPlayerModel<AbstractClientPlayerEntity> playermodel = (SquidPlayerModel<AbstractClientPlayerEntity>)this.getEntityModel();
-        this.setModelVisibilities(clientPlayer);
-        GlStateManager.enableBlend();
-        GlStateManager.translatef(0.0F, 0.0F, 1.0F);
+        this.renderItem(matrixStackIn, bufferIn, combinedLightIn, playerIn, playermodel.squidTentacles[playermodel.squidTentacles.length / 2], playermodel.bipedLeftArmwear);
+    }
+
+    /**
+     * from net.minecraft.client.renderer.entity.PlayerRenderer.java#renderItem
+     */
+    private void renderItem(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, AbstractClientPlayerEntity playerIn, ModelRenderer rendererArmIn, ModelRenderer rendererArmwearIn) {
+        PlayerModel<AbstractClientPlayerEntity> playermodel = this.getEntityModel();
+        this.setModelVisibilities(playerIn);
         playermodel.swingProgress = 0.0F;
         playermodel.isSneak = false;
         playermodel.swimAnimation = 0.0F;
-        playermodel.swingProgress = 0.0F;
-        playermodel.isSneak = false;
-        playermodel.setRotationAngles(clientPlayer, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f1);
-        playermodel.squidTentacles[playermodel.squidTentacles.length / 2].render(f1);
-        //this.squidModel.bipedRightArmwear.render(f1);
-        GlStateManager.disableBlend();
+        playermodel.setRotationAngles(playerIn, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+        rendererArmIn.rotateAngleX = 0.0F;
+        rendererArmIn.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntitySolid(playerIn.getLocationSkin())), combinedLightIn, OverlayTexture.NO_OVERLAY);
+        //rendererArmwearIn.rotateAngleX = 0.0F;
+        //rendererArmwearIn.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucent(playerIn.getLocationSkin())), combinedLightIn, OverlayTexture.NO_OVERLAY);
     }
 
     /**
@@ -150,7 +141,7 @@ public class SquidPlayerRenderer extends PlayerRenderer {
             //playermodel.bipedRightLegwear.showModel = clientPlayer.isWearing(PlayerModelPart.RIGHT_PANTS_LEG);
             //playermodel.bipedLeftArmwear.showModel = clientPlayer.isWearing(PlayerModelPart.LEFT_SLEEVE);
             //playermodel.bipedRightArmwear.showModel = clientPlayer.isWearing(PlayerModelPart.RIGHT_SLEEVE);
-            playermodel.isSneak = clientPlayer.shouldRenderSneaking();
+            playermodel.isSneak = clientPlayer.isCrouching();
             BipedModel.ArmPose bipedmodel$armpose = this.getArmPose(clientPlayer, itemstack, itemstack1, Hand.MAIN_HAND);
             BipedModel.ArmPose bipedmodel$armpose1 = this.getArmPose(clientPlayer, itemstack, itemstack1, Hand.OFF_HAND);
             if (clientPlayer.getPrimaryHand() == HandSide.RIGHT) {
@@ -172,11 +163,11 @@ public class SquidPlayerRenderer extends PlayerRenderer {
      * @param handType
      * @return 腕のポーズタイプ
      */
-    private BipedModel.ArmPose getArmPose(AbstractClientPlayerEntity clientPlayer, ItemStack mainHandItem, ItemStack offHandItem, Hand handType) {
+    public BipedModel.ArmPose getArmPose(AbstractClientPlayerEntity clientPlayer, ItemStack mainHandItem, ItemStack offHandItem, Hand handType) {
         BipedModel.ArmPose armPose = BipedModel.ArmPose.EMPTY;
         try {
             // changed modifier with AccessTransformer(private -> public)
-            armPose = this.func_217766_a(clientPlayer, mainHandItem, offHandItem, handType);
+            armPose = super.getArmPose(clientPlayer, mainHandItem, offHandItem, handType);
         } catch (Exception e) {
             e.printStackTrace();
         }

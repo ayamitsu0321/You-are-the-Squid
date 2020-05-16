@@ -2,12 +2,13 @@ package ayamitsu0321.urtsquid;
 
 import ayamitsu0321.urtsquid.client.renderer.entity.SquidPlayerRenderer;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -26,7 +27,7 @@ public class URTSquid {
     /** squid size */
     public static final EntitySize STANDING_SIZE = EntitySize.flexible(0.8F, 0.6F);
     public static final EntitySize SLEEPING_SIZE = EntitySize.fixed(0.2F, 0.2F);
-    public static final Map<Pose, EntitySize> SIZE_BY_POSE = ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.SLEEPING, SLEEPING_SIZE).put(Pose.FALL_FLYING, EntitySize.flexible(0.3F, 0.3F)).put(Pose.SWIMMING, EntitySize.flexible(0.3F, 0.3F)).put(Pose.SPIN_ATTACK, EntitySize.flexible(0.3F, 0.3F)).put(Pose.SNEAKING, EntitySize.flexible(0.6F, 0.4F)).put(Pose.DYING, EntitySize.fixed(0.2F, 0.2F)).build();
+    public static final Map<Pose, EntitySize> SIZE_BY_POSE = ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, STANDING_SIZE).put(Pose.SLEEPING, SLEEPING_SIZE).put(Pose.FALL_FLYING, EntitySize.flexible(0.3F, 0.3F)).put(Pose.SWIMMING, EntitySize.flexible(0.3F, 0.3F)).put(Pose.SPIN_ATTACK, EntitySize.flexible(0.3F, 0.3F)).put(Pose.CROUCHING, EntitySize.flexible(0.6F, 0.4F)).put(Pose.DYING, EntitySize.fixed(0.2F, 0.2F)).build();
 
     public URTSquid() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
@@ -34,9 +35,9 @@ public class URTSquid {
     }
 
     public void doClientStuff(final FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(AbstractClientPlayerEntity.class, new IRenderFactory<AbstractClientPlayerEntity>() {
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.PLAYER, new IRenderFactory<PlayerEntity>() {
             @Override
-            public EntityRenderer<? super AbstractClientPlayerEntity> createRenderFor(EntityRendererManager manager) {
+            public EntityRenderer<? super PlayerEntity> createRenderFor(EntityRendererManager manager) {
                 PlayerRenderer defaultRenderer = new SquidPlayerRenderer(manager);
                 PlayerRenderer slimRenderer = new SquidPlayerRenderer(manager, true);
 
@@ -47,7 +48,7 @@ public class URTSquid {
                 skinMap.put("default", defaultRenderer);
                 skinMap.put("slim", slimRenderer);
 
-                return defaultRenderer;
+                return null;
             }
         });
     }
