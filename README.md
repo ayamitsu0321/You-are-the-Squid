@@ -10,8 +10,8 @@
 - Player dig fast underwater.
 
 ## Requirement
-- Minecrat 1.14.4
-- MinecraftForge 28.1.0+
+- Minecrat 1.15.2
+- MinecraftForge 31.1.0+
 
 ## Installtion
 - Install MinecraftForge.
