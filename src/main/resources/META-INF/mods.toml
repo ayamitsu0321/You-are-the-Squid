@@ -1,6 +1,7 @@
 modLoader="javafml" #mandatory
 loaderVersion="[28,)" #mandatory (28 is current forge version)
 issueTrackerURL="https://github.com/ayamitsu0321/You-are-the-Squid/issues" #optional
+license="All rights reserved"
 [[mods]] #mandatory
 modId="urtsquid" #mandatory
 version="${version}" #mandatory
@@ -19,13 +20,13 @@ description='''
 [[dependencies.ayamitsu0321_urtsquid]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[31,)" #mandatory
+    versionRange="[35,)" #mandatory
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.ayamitsu0321_urtsquid]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.4,1.17)"
     ordering="NONE"
     side="BOTH"

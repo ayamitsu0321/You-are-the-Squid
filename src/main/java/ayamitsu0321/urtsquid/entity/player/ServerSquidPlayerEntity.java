@@ -11,7 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerInteractionManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
@@ -95,9 +95,9 @@ public class ServerSquidPlayerEntity extends ServerPlayerEntity implements ISqui
     }
 
     @Override
-    public void travel(Vec3d p_213352_1_) {
-        Vec3d motionVec = this.getMotion();
-        Vec3d lookVec = this.getLookVec();
+    public void travel(Vector3d travelVec) {
+        Vector3d motionVec = this.getMotion();
+        Vector3d lookVec = this.getLookVec();
 
         if (!this.isPassenger()) {
             if (!this.isInWater() || this.abilities.isFlying) {
@@ -111,7 +111,7 @@ public class ServerSquidPlayerEntity extends ServerPlayerEntity implements ISqui
             }
         }
 
-        super.travel(p_213352_1_);
+        super.travel(travelVec);
     }
 
     /** ISquidPlayerEntity */

@@ -17,7 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,8 +41,8 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
     //private float randomMotionVecY;
     //private float randomMotionVecZ;
 
-    public ClientSquidPlayerEntity(Minecraft mc, ClientWorld world, ClientPlayNetHandler netHandler, StatisticsManager statisticsManager, ClientRecipeBook recipeBook) {
-        super(mc, world, netHandler, statisticsManager, recipeBook);
+    public ClientSquidPlayerEntity(Minecraft mc, ClientWorld world, ClientPlayNetHandler connection, StatisticsManager stats, ClientRecipeBook recipeBook, boolean clientSneakState, boolean clientSprintState) {
+        super(mc, world, connection, stats, recipeBook, clientSneakState, clientSprintState);
         this.rand.setSeed((long)(1 + this.getEntityId()));
         this.rotationVelocity = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
     }
@@ -172,7 +172,7 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
                 this.rotateSpeed *= 0.99F;
             }
 
-            Vec3d motionVec = this.getMotion();
+            Vector3d motionVec = this.getMotion();
             float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
             double yDistance = motionVec.y;//this.posY - this.lastTickPosY;
 
@@ -193,7 +193,7 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
             }
 
             /** pitch */
-            Vec3d motionVec = this.getMotion();
+            Vector3d motionVec = this.getMotion();
             float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
             double yDistance = motionVec.y;//this.posY - this.lastTickPosY;
 
@@ -221,9 +221,9 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
     }
 
     @Override
-    public void travel(Vec3d p_213352_1_) {
-        Vec3d motionVec = this.getMotion();
-        Vec3d lookVec = this.getLookVec();
+    public void travel(Vector3d travelVector) {
+        Vector3d motionVec = this.getMotion();
+        Vector3d lookVec = this.getLookVec();
 
         if (!this.isPassenger()) {
             if (!this.isInWater() || this.abilities.isFlying) {
@@ -237,7 +237,7 @@ public class ClientSquidPlayerEntity extends ClientPlayerEntity implements ISqui
             }
         }
 
-        super.travel(p_213352_1_);
+        super.travel(travelVector);
     }
 
     @Override

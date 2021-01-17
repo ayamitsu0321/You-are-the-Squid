@@ -14,7 +14,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -161,7 +161,7 @@ public class RemoteSquidPlayerEntity extends RemoteClientPlayerEntity implements
                 this.rotateSpeed *= 0.99F;
             }
 
-            Vec3d motionVec = this.getMotion();
+            Vector3d motionVec = this.getMotion();
             float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
             double yDistance = motionVec.y;
 
@@ -182,7 +182,7 @@ public class RemoteSquidPlayerEntity extends RemoteClientPlayerEntity implements
             }
 
             /** pitch */
-            Vec3d motionVec = this.getMotion();
+            Vector3d motionVec = this.getMotion();
             float lvt_2_1_ = MathHelper.sqrt(horizontalMag(motionVec));
             double yDistance = motionVec.y;
 
