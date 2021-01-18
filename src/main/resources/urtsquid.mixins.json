@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "package": "ayamitsu0321.urtsquid.asm.mixin",
+  "refmap": "urtsquid.refmap.json",
+  "mixins": [
+    "PlayerControllerMixin",
+    "ClientPlayNetHandlerMixin",
+    "PlayerListMixin"
+  ]
+}

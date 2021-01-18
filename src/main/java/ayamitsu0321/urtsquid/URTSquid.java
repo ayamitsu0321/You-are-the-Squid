@@ -15,6 +15,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.Map;
@@ -31,6 +32,7 @@ public class URTSquid {
 
     public URTSquid() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doCommonStuff);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -51,5 +53,9 @@ public class URTSquid {
                 return null;
             }
         });
+    }
+
+    public void doCommonStuff(final FMLCommonSetupEvent event) {
+        EntityType.PLAYER.size = STANDING_SIZE;
     }
 }
